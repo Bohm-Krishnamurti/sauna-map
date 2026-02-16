@@ -103,24 +103,112 @@
 
         #map-header {
             background: #fff;
-            padding: 20px 32px;
+            padding: 16px 32px;
             border-bottom: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        #map-header h1 {
+        .header-left h1 {
             font-size: 13px;
             font-weight: 400;
             letter-spacing: 0.2em;
             text-transform: uppercase;
+            margin: 0;
         }
 
-        #map-header p {
+        .header-left p {
             font-size: 12px;
             color: #666;
             letter-spacing: 0.1em;
+            margin: 4px 0 0 0;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            padding: 8px 16px;
+            background: #fff;
+            color: #111;
+            border: 1px solid #ddd;
+            font-size: 11px;
+            font-family: 'EB Garamond', Georgia, serif;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .header-btn:hover {
+            border-color: #111;
+        }
+
+        .header-btn.active {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
+
+        #list-view {
+            flex: 1;
+            overflow-y: auto;
+            background: #fff;
+            padding: 0;
+        }
+
+        .list-item {
+            padding: 20px 32px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .list-item:hover {
+            background: #fafafa;
+        }
+
+        .list-item h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0 0 6px 0;
+        }
+
+        .list-item .list-address {
+            font-size: 13px;
+            color: #666;
+            margin: 0 0 4px 0;
+        }
+
+        .list-item .list-hours {
+            font-size: 12px;
+            color: #111;
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f5f5f5;
+            margin-top: 8px;
+        }
+
+        .list-item .list-link {
+            font-size: 11px;
+            color: #111;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #111;
+            margin-left: 12px;
+        }
+
+        .user-marker {
+            width: 16px;
+            height: 16px;
+            background: #0066ff;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
         #map {
@@ -499,10 +587,18 @@
     <!-- Map Screen -->
     <div id="map-screen">
         <div id="map-header">
-            <h1>Greater London Sauna Map</h1>
-            <p>42 locations</p>
+            <div class="header-left">
+                <h1>Greater London Sauna Map</h1>
+                <p>40 locations</p>
+            </div>
+            <div class="header-controls">
+                <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
+                <button id="map-view-btn" class="header-btn active">Map</button>
+                <button id="list-view-btn" class="header-btn">List</button>
+            </div>
         </div>
         <div id="map"></div>
+        <div id="list-view" style="display: none;"></div>
         <button id="add-sauna-btn">+ Add Sauna</button>
     </div>
 
@@ -609,30 +705,30 @@
             {"name": "Drip Sauna", "address": "Coaling Jetty, Battersea Power Station, London SW11 8BZ", "lat": 51.4707933, "lon": -0.172214, "website": "https://www.dripsauna.co.uk/", "hours": "Daily, session-based booking"},
             {"name": "Finnish Church in London", "address": "33 Albion Street, Rotherhithe, London SE16 7HZ", "lat": 51.5002908, "lon": -0.0436321, "website": "https://britannia.merimieskirkko.fi/en/", "hours": "Wed–Sun, check website"},
             {"name": "Hot & Cold UK", "address": "662 High Road Leytonstone, London E11 3AA", "lat": 51.5683955, "lon": 0.0111704, "website": "https://hotandcoldonline.co.uk/", "hours": "Daily 6am–9pm"},
-            {"name": "Innervisions Alchemy", "address": "Bermondsey, London", "lat": 51.4970125, "lon": -0.063268, "website": "https://saunamap.uk/sauna/innervisions-sauna/", "hours": "Check website"},
-            {"name": "Little Healing", "address": "Ealing, London", "lat": 51.5126553, "lon": -0.3051952, "website": "https://saunamap.uk/sauna/little-healing/", "hours": "Check website"},
+            {"name": "Innervisions Alchemy", "address": "Rollins Street, London SE15 1EP", "lat": 51.4970125, "lon": -0.063268, "website": "https://www.innervisionsalchemy.co.uk/", "hours": "Check website"},
+            {"name": "Little Healing", "address": "1 New Mount Court, Julien Road, London W5 4XA", "lat": 51.5126553, "lon": -0.3051952, "website": "https://www.littlehealing.co.uk/", "hours": "By appointment, 45-min sessions"},
             {"name": "LoWLU, Kentish Town", "address": "Caversham Road, Kentish Town, London NW5", "lat": 51.5500554, "lon": -0.1425712, "website": "https://www.lowlu.co/", "hours": "Daily 7am–9pm"},
             {"name": "LoWLU, Wandsworth", "address": "Wandsworth, London SW18", "lat": 51.4570271, "lon": -0.1932607, "website": "https://www.lowlu.co/", "hours": "Daily 6am–9pm"},
             {"name": "Mile End Climbing Wall", "address": "Haverfield Road, Mile End Park, London E3 5BE", "lat": 51.5253378, "lon": -0.033435, "website": "https://www.mileendwall.org.uk/", "hours": "Mon–Fri 7am–10pm, Sat–Sun 9am–8pm"},
             {"name": "New Docklands Steam Baths", "address": "30a Stephenson Street, Canning Town, London E16 4SA", "lat": 51.5139887, "lon": 0.0082987, "website": "https://newdocklands.uk/", "hours": "Tue–Sun, varies by day"},
             {"name": "Old Kent Road Sauna", "address": "Old Kent Road, London SE15", "lat": 51.4752983, "lon": -0.0404289, "website": "https://www.oldkentroadsauna.com/", "hours": "Check website"},
             {"name": "Porchester Spa", "address": "Porchester Centre, Porchester Road, Queensway, London W2 5HS", "lat": 51.5122764, "lon": -0.1883854, "website": "https://www.porchesterspatreatments.co.uk/", "hours": "Mon–Fri 10am–9:30pm, Sat–Sun 10am–8pm"},
-            {"name": "Putney Recovery Room", "address": "Putney, London", "lat": 51.4625314, "lon": -0.2163018, "website": "https://saunamap.uk/sauna/putney-recovery-room/", "hours": "Check website"},
+            {"name": "Putney Recovery Room", "address": "Putney, London SW15", "lat": 51.4625314, "lon": -0.2163018, "website": "https://www.putneyrecovery.com/", "hours": "Check website"},
             {"name": "Rebase", "address": "1a St Vincent Street, Marylebone, London W1U 4DA", "lat": 51.5196374, "lon": -0.1519627, "website": "https://www.rebaserecovery.com/", "hours": "Mon–Fri 7am–9pm, Sat–Sun 8am–8pm"},
-            {"name": "Revitalise Urban Spa", "address": "Lower Clapton, London", "lat": 51.5546565, "lon": -0.0550912, "website": "https://saunamap.uk/sauna/revitalise-urban-spa/", "hours": "Check website"},
+            {"name": "Revitalise Urban Spa", "address": "2 Maple Path, Lower Clapton, London E5 8FD", "lat": 51.5546565, "lon": -0.0550912, "website": "https://www.revitaliseurbanspa.co.uk/", "hours": "Check website"},
             {"name": "Rooftop Saunas, Brixton", "address": "International House, 11th Floor, Brixton, London SW9", "lat": 51.4633914, "lon": -0.1148023, "website": "https://rooftopsaunas.com/", "hours": "Mon–Sat 8am–10:20pm, Sun 9am–7:40pm"},
             {"name": "Rooftop Saunas, Hackney", "address": "Netil Corner, 2 Bocking Street, London E8 4RU", "lat": 51.5432402, "lon": -0.0493621, "website": "https://rooftopsaunas.com/", "hours": "Mon–Sat 7:30am–10:20pm, Sun 10am–7:50pm"},
             {"name": "Sauna & Plunge", "address": "124 Tabernacle Street, Shoreditch, London EC2A 4SA", "lat": 51.5266694, "lon": -0.0798926, "website": "https://saunaandplunge.life/", "hours": "Daily 6:30am–8pm"},
             {"name": "Sauna Social Club", "address": "Railway Arch 842, Brayards Road, Peckham, London SE15 2AG", "lat": 51.4734122, "lon": -0.0699321, "website": "https://www.saunasocialclub.co.uk/", "hours": "Wed–Sun, session-based"},
             {"name": "Saunos", "address": "49-50 Eagle Wharf Road, London N1 7ED", "lat": 51.5323935, "lon": -0.086078, "website": "https://www.legitfit.com/p/timetable/saunoslimited", "hours": "Check website for sessions"},
             {"name": "Skuna Sauna, London", "address": "West India Quay, Hertsmere Road, Canary Wharf, London E14 4AL", "lat": 51.5048954, "lon": -0.0190006, "website": "https://www.skunasauna.com/", "hours": "Mon–Fri 12pm–9pm, Sat–Sun 10am–9pm"},
-            {"name": "Stoke Newington Sauna", "address": "Stoke Newington, London", "lat": 51.5578698, "lon": -0.0822482, "website": "https://saunamap.uk/sauna/stoke-newington-sauna/", "hours": "Check website"},
-            {"name": "SweHeat Sauna", "address": "Canning Town, London", "lat": 51.5139887, "lon": 0.0082987, "website": "https://saunamap.uk/sauna/sweheat-sauna/", "hours": "Check website"},
+            {"name": "Stoke Newington Sauna", "address": "129 Stoke Newington High St, London N16 0PH", "lat": 51.5578698, "lon": -0.0822482, "website": "https://stokenewingtonsauna.com/", "hours": "Check website"},
+            {"name": "SweHeat Sauna", "address": "1 Dock Rd, Royal Victoria Dock, London E16 1AH", "lat": 51.5078, "lon": 0.0178, "website": "https://www.sweheatsauna.co.uk/", "hours": "Check website"},
             {"name": "Temz Floating Saunas", "address": "The Lensbury, Broom Road, Teddington, London TW11 9NU", "lat": 51.4277844, "lon": -0.333653, "website": "https://www.temzfloatingsaunas.com/", "hours": "By appointment, 50-min sessions"},
             {"name": "The Bath House", "address": "1 Grosvenor Gardens, Belgravia, London SW1W 0BD", "lat": 51.4982128, "lon": -0.1534998, "website": "https://banyalondon.co.uk/", "hours": "Mon–Sat 10am–11pm, Sun 10am–10pm"},
             {"name": "The Cabin Sauna", "address": "Clapham Common, London SW4", "lat": 51.4614469, "lon": -0.138627, "website": "https://thecabinsauna.co.uk/", "hours": "Seasonal (Oct–May), check website"},
-            {"name": "The Sanctuary at &Soul Community", "address": "Shoreditch, London", "lat": 51.5266694, "lon": -0.0798926, "website": "https://saunamap.uk/sauna/the-sanctuary-at-soul/", "hours": "Check website"},
-            {"name": "Urban Heat Sauna", "address": "Camberwell, London", "lat": 51.4745706, "lon": -0.0925416, "website": "https://saunamap.uk/sauna/urban-heat-sauna/", "hours": "Check website"},
+            {"name": "The Sanctuary at &Soul", "address": "114 Cheshire Street, London E2 6EJ", "lat": 51.5225, "lon": -0.0665, "website": "https://andsoul.com/locations/shoreditch/the-sanctuary", "hours": "Check website"},
+            {"name": "Urban Heat Sauna", "address": "347 Camberwell Station Road, London SE5 9JN", "lat": 51.4683, "lon": -0.0912, "website": "https://www.urbanheatwellness.com/", "hours": "Check website"},
             {"name": "WellNest", "address": "7 Crucifix Lane, London Bridge, London SE1 3JW", "lat": 51.5061349, "lon": -0.1011379, "website": "https://www.wellnest.london/", "hours": "Mon–Fri 7am–10pm, Sat 9am–6pm, Sun 10am–5pm"}
         ];
 
@@ -687,7 +783,7 @@
             input.focus();
         });
 
-        // Custom marker icon
+        // Custom marker icons
         const customIcon = L.divIcon({
             className: 'custom-marker',
             iconSize: [12, 12],
@@ -695,9 +791,18 @@
             popupAnchor: [0, -8]
         });
 
+        const userIcon = L.divIcon({
+            className: 'user-marker',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
+        });
+
+        let map = null;
+        let userMarker = null;
+
         // Initialize map
         function initializeMap() {
-            const map = L.map('map').setView([51.5074, -0.1278], 11);
+            map = L.map('map').setView([51.5074, -0.1278], 11);
 
             // Greyscale map tiles (CartoDB Positron - clean greyscale, no API key)
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
@@ -728,6 +833,107 @@
                 marker.bindPopup(popupContent, { maxWidth: 320 });
                 marker.addTo(map);
             });
+
+            // Build list view
+            buildListView();
+
+            // Setup view toggle
+            setupViewToggle();
+
+            // Setup locate button
+            setupLocateButton();
+        }
+
+        // Build list view
+        function buildListView() {
+            const listView = document.getElementById('list-view');
+            const sortedSaunas = [...saunaData].sort((a, b) => a.name.localeCompare(b.name));
+
+            listView.innerHTML = sortedSaunas.map(sauna => `
+                <div class="list-item" onclick="focusSauna(${sauna.lat}, ${sauna.lon})">
+                    <h3>${sauna.name}</h3>
+                    <p class="list-address">${sauna.address}</p>
+                    <span class="list-hours">${sauna.hours}</span>
+                    <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="list-link" onclick="event.stopPropagation()">Website</a>
+                </div>
+            `).join('');
+        }
+
+        // Focus on sauna from list
+        function focusSauna(lat, lon) {
+            document.getElementById('map').style.display = 'block';
+            document.getElementById('list-view').style.display = 'none';
+            document.getElementById('map-view-btn').classList.add('active');
+            document.getElementById('list-view-btn').classList.remove('active');
+            map.setView([lat, lon], 15);
+        }
+
+        // Setup view toggle
+        function setupViewToggle() {
+            const mapBtn = document.getElementById('map-view-btn');
+            const listBtn = document.getElementById('list-view-btn');
+            const mapEl = document.getElementById('map');
+            const listEl = document.getElementById('list-view');
+
+            mapBtn.onclick = () => {
+                mapEl.style.display = 'block';
+                listEl.style.display = 'none';
+                mapBtn.classList.add('active');
+                listBtn.classList.remove('active');
+                map.invalidateSize();
+            };
+
+            listBtn.onclick = () => {
+                mapEl.style.display = 'none';
+                listEl.style.display = 'block';
+                listBtn.classList.add('active');
+                mapBtn.classList.remove('active');
+            };
+        }
+
+        // Setup locate button
+        function setupLocateButton() {
+            const locateBtn = document.getElementById('locate-btn');
+
+            locateBtn.onclick = () => {
+                if (!navigator.geolocation) {
+                    alert('Geolocation not supported by your browser');
+                    return;
+                }
+
+                locateBtn.textContent = 'Locating...';
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+
+                        // Switch to map view
+                        document.getElementById('map').style.display = 'block';
+                        document.getElementById('list-view').style.display = 'none';
+                        document.getElementById('map-view-btn').classList.add('active');
+                        document.getElementById('list-view-btn').classList.remove('active');
+
+                        // Remove old marker
+                        if (userMarker) {
+                            map.removeLayer(userMarker);
+                        }
+
+                        // Add user marker
+                        userMarker = L.marker([lat, lon], { icon: userIcon })
+                            .bindPopup('<div class="popup-inner"><h3>You are here</h3></div>')
+                            .addTo(map);
+
+                        map.setView([lat, lon], 13);
+                        locateBtn.textContent = 'Locate Me';
+                    },
+                    (error) => {
+                        locateBtn.textContent = 'Locate Me';
+                        alert('Unable to get your location. Please enable location access.');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            };
         }
 
         // Handle save note
