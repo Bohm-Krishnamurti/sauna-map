@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greater London Sauna Map</title>
+    <title>Shvitz Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
@@ -19,8 +19,8 @@
 
         body {
             font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
-            background: #fff;
-            color: #111;
+            background: #f7f3ed;
+            color: #2a2520;
             overflow: hidden;
         }
 
@@ -29,7 +29,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #fff;
+            background: #f7f3ed;
         }
 
         #password-form {
@@ -38,12 +38,19 @@
             padding: 40px;
         }
 
+        .landing-image {
+            width: 200px;
+            height: auto;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
         #password-form h2 {
             font-size: 14px;
             font-weight: 400;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: #111;
+            color: #2a2520;
             margin-bottom: 48px;
         }
 
@@ -51,11 +58,11 @@
             width: 100%;
             padding: 12px 0;
             border: none;
-            border-bottom: 1px solid #111;
+            border-bottom: 1px solid #2a2520;
             font-size: 16px;
             font-family: 'EB Garamond', Georgia, serif;
             background: transparent;
-            color: #111;
+            color: #2a2520;
             text-align: center;
             letter-spacing: 0.1em;
         }
@@ -72,8 +79,8 @@
         button {
             margin-top: 32px;
             padding: 12px 48px;
-            background: #111;
-            color: #fff;
+            background: #2a2520;
+            color: #f7f3ed;
             border: none;
             font-size: 12px;
             font-family: 'EB Garamond', Georgia, serif;
@@ -84,11 +91,11 @@
         }
 
         button:hover {
-            background: #333;
+            background: #4a4540;
         }
 
         .error {
-            color: #111;
+            color: #8b4513;
             margin-top: 24px;
             font-size: 13px;
             font-style: italic;
@@ -102,9 +109,9 @@
         }
 
         #map-header {
-            background: #fff;
+            background: #f7f3ed;
             padding: 16px 32px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #d9d0c3;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -132,9 +139,9 @@
 
         .header-btn {
             padding: 8px 16px;
-            background: #fff;
-            color: #111;
-            border: 1px solid #ddd;
+            background: #f7f3ed;
+            color: #2a2520;
+            border: 1px solid #d9d0c3;
             font-size: 11px;
             font-family: 'EB Garamond', Georgia, serif;
             letter-spacing: 0.1em;
@@ -144,31 +151,31 @@
         }
 
         .header-btn:hover {
-            border-color: #111;
+            border-color: #2a2520;
         }
 
         .header-btn.active {
-            background: #111;
-            color: #fff;
-            border-color: #111;
+            background: #2a2520;
+            color: #f7f3ed;
+            border-color: #2a2520;
         }
 
         #list-view {
             flex: 1;
             overflow-y: auto;
-            background: #fff;
+            background: #f7f3ed;
             padding: 0;
         }
 
         .list-item {
             padding: 20px 32px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #d9d0c3;
             cursor: pointer;
             transition: background 0.2s;
         }
 
         .list-item:hover {
-            background: #fafafa;
+            background: #efe9e0;
         }
 
         .list-item h3 {
@@ -179,64 +186,64 @@
 
         .list-item .list-address {
             font-size: 13px;
-            color: #666;
+            color: #6b6156;
             margin: 0 0 4px 0;
         }
 
         .list-item .list-hours {
             font-size: 12px;
-            color: #111;
+            color: #2a2520;
             display: inline-block;
             padding: 4px 8px;
-            background: #f5f5f5;
+            background: #ebe5db;
             margin-top: 8px;
         }
 
         .list-item .list-link {
             font-size: 11px;
-            color: #111;
+            color: #2a2520;
             text-decoration: none;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            border-bottom: 1px solid #111;
+            border-bottom: 1px solid #2a2520;
             margin-left: 12px;
         }
 
         .user-marker {
             width: 16px;
             height: 16px;
-            background: #0066ff;
+            background: #8b5a2b;
             border-radius: 50%;
-            border: 3px solid #fff;
+            border: 3px solid #f7f3ed;
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
         #map {
             flex: 1;
             width: 100%;
-            background: #f5f5f5;
+            background: #ebe5db;
         }
 
         /* Minimal Leaflet overrides */
         .leaflet-container {
-            background: #f5f5f5;
+            background: #ebe5db;
             font-family: 'EB Garamond', Georgia, serif;
         }
 
         .leaflet-popup-content-wrapper {
-            background: #fff;
-            color: #111;
+            background: #f7f3ed;
+            color: #2a2520;
             border-radius: 0;
             box-shadow: 0 2px 12px rgba(0,0,0,0.15);
             padding: 0;
         }
 
         .leaflet-popup-tip {
-            background: #fff;
+            background: #f7f3ed;
         }
 
         .leaflet-popup-close-button {
-            color: #111 !important;
+            color: #2a2520 !important;
             font-size: 20px !important;
             padding: 8px 10px !important;
         }
@@ -260,28 +267,28 @@
 
         .popup-inner .address {
             font-size: 13px;
-            color: #666;
+            color: #6b6156;
             margin: 0 0 8px 0;
             line-height: 1.5;
         }
 
         .popup-inner .hours {
             font-size: 12px;
-            color: #111;
+            color: #2a2520;
             margin: 0 0 16px 0;
             padding: 6px 10px;
-            background: #f5f5f5;
+            background: #ebe5db;
             display: inline-block;
         }
 
         .popup-inner a.website-link {
             display: inline-block;
             font-size: 12px;
-            color: #111;
+            color: #2a2520;
             text-decoration: none;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            border-bottom: 1px solid #111;
+            border-bottom: 1px solid #2a2520;
             padding-bottom: 2px;
             transition: opacity 0.2s;
         }
@@ -291,9 +298,9 @@
         }
 
         .notes-section {
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #d9d0c3;
             padding: 16px 24px;
-            background: #fafafa;
+            background: #efe9e0;
         }
 
         .notes-section label {
@@ -301,7 +308,7 @@
             font-size: 11px;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: #666;
+            color: #6b6156;
             margin-bottom: 8px;
         }
 
@@ -309,25 +316,25 @@
             width: 100%;
             min-height: 80px;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid #d9d0c3;
             font-family: 'EB Garamond', Georgia, serif;
             font-size: 14px;
             line-height: 1.5;
             resize: vertical;
-            background: #fff;
+            background: #f7f3ed;
         }
 
         .notes-section textarea:focus {
             outline: none;
-            border-color: #111;
+            border-color: #2a2520;
         }
 
         .notes-section .save-note {
             margin-top: 10px;
             padding: 8px 20px;
             font-size: 11px;
-            background: #111;
-            color: #fff;
+            background: #2a2520;
+            color: #f7f3ed;
         }
 
         .notes-section .note-saved {
@@ -335,14 +342,14 @@
             margin-top: 10px;
             font-size: 12px;
             font-style: italic;
-            color: #666;
+            color: #6b6156;
         }
 
         /* Leaflet controls */
         .leaflet-control-zoom a {
-            background: #fff !important;
-            color: #111 !important;
-            border: 1px solid #ddd !important;
+            background: #f7f3ed !important;
+            color: #2a2520 !important;
+            border: 1px solid #d9d0c3 !important;
             border-radius: 0 !important;
             width: 32px !important;
             height: 32px !important;
@@ -351,7 +358,7 @@
         }
 
         .leaflet-control-zoom a:hover {
-            background: #f5f5f5 !important;
+            background: #ebe5db !important;
         }
 
         .leaflet-control-zoom {
@@ -360,32 +367,32 @@
         }
 
         .leaflet-control-attribution {
-            background: rgba(255,255,255,0.9) !important;
+            background: rgba(247,243,237,0.9) !important;
             font-size: 10px;
             font-family: 'EB Garamond', Georgia, serif;
         }
 
         .leaflet-control-attribution a {
-            color: #666 !important;
+            color: #6b6156 !important;
         }
 
         /* Custom marker */
         .custom-marker {
             width: 12px;
             height: 12px;
-            background: #111;
+            background: #2a2520;
             border-radius: 50%;
-            border: 2px solid #fff;
+            border: 2px solid #f7f3ed;
             box-shadow: 0 1px 4px rgba(0,0,0,0.3);
         }
 
-        /* Add Sauna Button */
+        /* Add Bathhouse Button */
         #add-sauna-btn {
             position: fixed;
             bottom: 32px;
             right: 32px;
-            background: #111;
-            color: #fff;
+            background: #2a2520;
+            color: #f7f3ed;
             border: none;
             padding: 14px 28px;
             font-size: 11px;
@@ -398,7 +405,7 @@
         }
 
         #add-sauna-btn:hover {
-            background: #333;
+            background: #4a4540;
         }
 
         /* Modal */
@@ -410,16 +417,16 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255,255,255,0.95);
+            background: rgba(247,243,237,0.95);
             overflow-y: auto;
         }
 
         .modal-content {
-            background: #fff;
+            background: #f7f3ed;
             margin: 60px auto;
             padding: 48px;
             max-width: 520px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #d9d0c3;
         }
 
         .modal-content h2 {
@@ -432,7 +439,7 @@
 
         .modal-content > p {
             font-size: 15px;
-            color: #666;
+            color: #6b6156;
             margin-bottom: 36px;
             line-height: 1.6;
         }
@@ -442,7 +449,7 @@
             font-size: 28px;
             font-weight: 300;
             cursor: pointer;
-            color: #111;
+            color: #2a2520;
             line-height: 1;
         }
 
@@ -459,7 +466,7 @@
             font-size: 11px;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: #666;
+            color: #6b6156;
             margin-bottom: 10px;
         }
 
@@ -468,17 +475,17 @@
         .form-group select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid #d9d0c3;
             font-size: 15px;
             font-family: 'EB Garamond', Georgia, serif;
-            background: #fff;
+            background: #f7f3ed;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #111;
+            border-color: #2a2520;
         }
 
         .form-group textarea {
@@ -489,7 +496,7 @@
 
         .form-group small {
             display: block;
-            color: #999;
+            color: #8b8278;
             margin-top: 6px;
             font-size: 13px;
             font-style: italic;
@@ -507,7 +514,7 @@
 
         .rating-group label {
             padding: 8px 16px;
-            border: 1px solid #ddd;
+            border: 1px solid #d9d0c3;
             cursor: pointer;
             font-size: 14px;
             text-transform: none;
@@ -516,13 +523,13 @@
         }
 
         .rating-group input[type="radio"]:checked + label {
-            background: #111;
-            color: #fff;
-            border-color: #111;
+            background: #2a2520;
+            color: #f7f3ed;
+            border-color: #2a2520;
         }
 
         .rating-group label:hover {
-            border-color: #111;
+            border-color: #2a2520;
         }
 
         .submit-btn {
@@ -532,8 +539,8 @@
         }
 
         .success-message {
-            background: #111;
-            color: #fff;
+            background: #2a2520;
+            color: #f7f3ed;
             padding: 16px 20px;
             margin-bottom: 24px;
             display: none;
@@ -577,7 +584,8 @@
     <!-- Password Screen -->
     <div id="password-screen">
         <div id="password-form">
-            <h2>Greater London Sauna Map</h2>
+            <img src="https://i.pinimg.com/originals/8d/54/d2/8d54d2e33b1a851745c6db25d360a05e.jpg" alt="Shvitz" class="landing-image" />
+            <h2>Shvitz Map</h2>
             <input type="password" id="password-input" placeholder="Enter password" autocomplete="off" />
             <button onclick="checkPassword()">Enter</button>
             <div class="error" id="error-message">Incorrect password</div>
@@ -588,8 +596,8 @@
     <div id="map-screen">
         <div id="map-header">
             <div class="header-left">
-                <h1>Greater London Sauna Map</h1>
-                <p>40 locations</p>
+                <h1>Shvitz Map</h1>
+                <p>40 bathhouses</p>
             </div>
             <div class="header-controls">
                 <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
@@ -599,15 +607,15 @@
         </div>
         <div id="map"></div>
         <div id="list-view" style="display: none;"></div>
-        <button id="add-sauna-btn">+ Add Sauna</button>
+        <button id="add-sauna-btn">+ Add Bathhouse</button>
     </div>
 
-    <!-- Add/Review Sauna Modal -->
+    <!-- Add/Review Bathhouse Modal -->
     <div id="sauna-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Add or Review a Sauna</h2>
-            <p>Know a great sauna we're missing? Share it with the community.</p>
+            <h2>Add or Review a Bathhouse</h2>
+            <p>Know a great bathhouse we're missing? Share it with the community.</p>
 
             <div id="success-msg" class="success-message">
                 Thank you. Your submission has been received.
@@ -618,20 +626,20 @@
                     <label for="submission-type">What would you like to do?</label>
                     <select id="submission-type" required>
                         <option value="">Select an option</option>
-                        <option value="new">Add a new sauna</option>
-                        <option value="review">Review an existing sauna</option>
+                        <option value="new">Add a new bathhouse</option>
+                        <option value="review">Review an existing bathhouse</option>
                     </select>
                 </div>
 
                 <div class="form-group" id="sauna-select-group" style="display: none;">
-                    <label for="existing-sauna">Select Sauna</label>
+                    <label for="existing-sauna">Select Bathhouse</label>
                     <select id="existing-sauna">
-                        <option value="">Choose a sauna to review</option>
+                        <option value="">Choose a bathhouse to review</option>
                     </select>
                 </div>
 
                 <div class="form-group" id="sauna-name-group">
-                    <label for="sauna-name">Sauna Name</label>
+                    <label for="sauna-name">Bathhouse Name</label>
                     <input type="text" id="sauna-name" required>
                 </div>
 
@@ -824,7 +832,7 @@
                     </div>
                     <div class="notes-section">
                         <label>Your Notes</label>
-                        <textarea id="note-${sauna.name.replace(/[^a-zA-Z0-9]/g, '_')}" placeholder="Add your notes about this sauna...">${existingNote}</textarea>
+                        <textarea id="note-${sauna.name.replace(/[^a-zA-Z0-9]/g, '_')}" placeholder="Add your notes about this bathhouse...">${existingNote}</textarea>
                         <button type="button" class="save-note" onclick="handleSaveNote('${sauna.name.replace(/'/g, "\\'")}')">Save Note</button>
                         <div class="note-saved" id="saved-${sauna.name.replace(/[^a-zA-Z0-9]/g, '_')}">Note saved</div>
                     </div>
