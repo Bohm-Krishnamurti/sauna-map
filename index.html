@@ -9,7 +9,7 @@
           crossorigin=""/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -18,10 +18,10 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+            background: #fff;
+            color: #111;
             overflow: hidden;
-            background: #0a0a0a;
-            color: #e0e0e0;
         }
 
         #password-screen {
@@ -29,75 +29,69 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #fff;
         }
 
         #password-form {
-            background: #1e1e1e;
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
             text-align: center;
-            min-width: 350px;
-            border: 1px solid #333;
+            max-width: 320px;
+            padding: 40px;
         }
 
-        h2 {
-            font-family: 'IBM Plex Mono', monospace;
-            color: #00d4ff;
-            margin-bottom: 25px;
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
+        #password-form h2 {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #111;
+            margin-bottom: 48px;
         }
 
         #password-input {
-            padding: 14px 18px;
             width: 100%;
-            margin: 20px 0;
-            border: 2px solid #333;
-            border-radius: 10px;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 1px solid #111;
             font-size: 16px;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            transition: all 0.3s;
+            font-family: 'EB Garamond', Georgia, serif;
+            background: transparent;
+            color: #111;
+            text-align: center;
+            letter-spacing: 0.1em;
         }
 
         #password-input:focus {
             outline: none;
-            border-color: #00d4ff;
-            background: #121212;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            border-bottom-width: 2px;
+        }
+
+        #password-input::placeholder {
+            color: #999;
         }
 
         button {
-            padding: 14px 40px;
-            background: #00d4ff;
-            color: #0a0a0a;
+            margin-top: 32px;
+            padding: 12px 48px;
+            background: #111;
+            color: #fff;
             border: none;
-            border-radius: 10px;
+            font-size: 12px;
+            font-family: 'EB Garamond', Georgia, serif;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            width: 100%;
-            font-family: 'IBM Plex Mono', monospace;
+            transition: background 0.2s;
         }
 
         button:hover {
-            background: #00b8e6;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
+            background: #333;
         }
 
         .error {
-            color: #ff4757;
-            margin-top: 15px;
-            font-size: 14px;
+            color: #111;
+            margin-top: 24px;
+            font-size: 13px;
+            font-style: italic;
             display: none;
         }
 
@@ -108,149 +102,209 @@
         }
 
         #map-header {
-            background: #1a1a1a;
-            color: #e0e0e0;
-            padding: 20px 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            border-bottom: 2px solid #00d4ff;
+            background: #fff;
+            padding: 20px 32px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         #map-header h1 {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 24px;
-            font-weight: 600;
-            color: #00d4ff;
-            letter-spacing: -0.5px;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
         }
 
         #map-header p {
-            font-size: 14px;
-            color: #999;
-            margin-top: 8px;
-            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: #666;
+            letter-spacing: 0.1em;
         }
 
         #map {
             flex: 1;
             width: 100%;
-            background: #0a0a0a;
+            background: #f5f5f5;
         }
 
-        /* Dark mode Leaflet overrides */
+        /* Minimal Leaflet overrides */
         .leaflet-container {
-            background: #0a0a0a;
+            background: #f5f5f5;
+            font-family: 'EB Garamond', Georgia, serif;
         }
 
         .leaflet-popup-content-wrapper {
-            background: #1e1e1e;
-            color: #e0e0e0;
-            border: 1px solid #333;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            background: #fff;
+            color: #111;
+            border-radius: 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            padding: 0;
         }
 
         .leaflet-popup-tip {
-            background: #1e1e1e;
-            border: 1px solid #333;
+            background: #fff;
         }
 
         .leaflet-popup-close-button {
-            color: #999 !important;
-        }
-
-        .leaflet-popup-close-button:hover {
-            color: #e0e0e0 !important;
+            color: #111 !important;
+            font-size: 20px !important;
+            padding: 8px 10px !important;
         }
 
         .leaflet-popup-content {
-            margin: 18px;
+            margin: 0;
+            min-width: 260px;
+            max-width: 300px;
         }
 
-        .leaflet-popup-content h3 {
-            margin: 0 0 12px 0;
-            color: #00d4ff;
+        .popup-inner {
+            padding: 20px 24px;
+        }
+
+        .popup-inner h3 {
             font-size: 18px;
-            font-weight: 600;
-        }
-
-        .leaflet-popup-content p {
-            margin: 0 0 10px 0;
-            color: #b0b0b0;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .leaflet-popup-content a {
-            color: #00d4ff;
-            text-decoration: none;
-            font-size: 13px;
             font-weight: 500;
+            margin: 0 0 8px 0;
+            line-height: 1.3;
+        }
+
+        .popup-inner .address {
+            font-size: 13px;
+            color: #666;
+            margin: 0 0 16px 0;
+            line-height: 1.5;
+        }
+
+        .popup-inner a.website-link {
             display: inline-block;
-            margin-top: 8px;
-            padding: 6px 12px;
-            background: #0a0a0a;
-            border-radius: 6px;
-            border: 1px solid #333;
-            transition: all 0.2s;
+            font-size: 12px;
+            color: #111;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #111;
+            padding-bottom: 2px;
+            transition: opacity 0.2s;
         }
 
-        .leaflet-popup-content a:hover {
-            background: #00d4ff;
-            color: #0a0a0a;
-            border-color: #00d4ff;
+        .popup-inner a.website-link:hover {
+            opacity: 0.6;
         }
 
-        /* Leaflet controls dark mode */
+        .notes-section {
+            border-top: 1px solid #e0e0e0;
+            padding: 16px 24px;
+            background: #fafafa;
+        }
+
+        .notes-section label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .notes-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background: #fff;
+        }
+
+        .notes-section textarea:focus {
+            outline: none;
+            border-color: #111;
+        }
+
+        .notes-section .save-note {
+            margin-top: 10px;
+            padding: 8px 20px;
+            font-size: 11px;
+            background: #111;
+            color: #fff;
+        }
+
+        .notes-section .note-saved {
+            display: none;
+            margin-top: 10px;
+            font-size: 12px;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Leaflet controls */
         .leaflet-control-zoom a {
-            background: #1e1e1e !important;
-            color: #e0e0e0 !important;
-            border-color: #333 !important;
+            background: #fff !important;
+            color: #111 !important;
+            border: 1px solid #ddd !important;
+            border-radius: 0 !important;
+            width: 32px !important;
+            height: 32px !important;
+            line-height: 30px !important;
+            font-size: 16px !important;
         }
 
         .leaflet-control-zoom a:hover {
-            background: #2a2a2a !important;
+            background: #f5f5f5 !important;
+        }
+
+        .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: none !important;
         }
 
         .leaflet-control-attribution {
-            background: rgba(30, 30, 30, 0.8) !important;
-            color: #999 !important;
+            background: rgba(255,255,255,0.9) !important;
+            font-size: 10px;
+            font-family: 'EB Garamond', Georgia, serif;
         }
 
         .leaflet-control-attribution a {
-            color: #00d4ff !important;
+            color: #666 !important;
         }
 
-        /* Custom marker styling */
-        .leaflet-marker-icon {
-            filter: hue-rotate(180deg) saturate(1.5);
+        /* Custom marker */
+        .custom-marker {
+            width: 12px;
+            height: 12px;
+            background: #111;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
         }
 
         /* Add Sauna Button */
         #add-sauna-btn {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #00d4ff;
-            color: #0a0a0a;
+            bottom: 32px;
+            right: 32px;
+            background: #111;
+            color: #fff;
             border: none;
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 16px;
+            padding: 14px 28px;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
-            transition: all 0.3s;
             z-index: 1000;
-            font-family: 'IBM Plex Mono', monospace;
+            font-family: 'EB Garamond', Georgia, serif;
+            transition: background 0.2s;
         }
 
         #add-sauna-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.5);
-            background: #00b8e6;
+            background: #333;
         }
 
-        /* Modal Styles */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -259,99 +313,95 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.95);
+            overflow-y: auto;
         }
 
         .modal-content {
-            background: #1e1e1e;
-            margin: 3% auto;
-            padding: 40px;
-            border: 1px solid #333;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            background: #fff;
+            margin: 60px auto;
+            padding: 48px;
+            max-width: 520px;
+            border: 1px solid #e0e0e0;
         }
 
         .modal-content h2 {
-            font-family: 'IBM Plex Mono', monospace;
-            color: #00d4ff;
-            margin-bottom: 10px;
-            font-size: 28px;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
-        .modal-content p {
-            color: #999;
-            margin-bottom: 30px;
+        .modal-content > p {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 36px;
             line-height: 1.6;
         }
 
         .close {
-            color: #999;
             float: right;
-            font-size: 32px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 300;
             cursor: pointer;
-            line-height: 20px;
+            color: #111;
+            line-height: 1;
         }
 
         .close:hover {
-            color: #e0e0e0;
+            opacity: 0.6;
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
         .form-group label {
             display: block;
-            color: #00d4ff;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 10px;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 12px 15px;
-            background: #0a0a0a;
-            border: 2px solid #333;
-            border-radius: 8px;
-            color: #e0e0e0;
+            padding: 12px;
+            border: 1px solid #ddd;
             font-size: 15px;
-            transition: all 0.3s;
+            font-family: 'EB Garamond', Georgia, serif;
+            background: #fff;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            border-color: #111;
         }
 
         .form-group textarea {
-            resize: vertical;
             min-height: 100px;
-            font-family: inherit;
+            resize: vertical;
+            line-height: 1.6;
         }
 
         .form-group small {
             display: block;
-            color: #666;
-            margin-top: 5px;
-            font-size: 12px;
+            color: #999;
+            margin-top: 6px;
+            font-size: 13px;
+            font-style: italic;
         }
 
         .rating-group {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         .rating-group input[type="radio"] {
@@ -360,105 +410,69 @@
 
         .rating-group label {
             padding: 8px 16px;
-            background: #0a0a0a;
-            border: 2px solid #333;
-            border-radius: 8px;
+            border: 1px solid #ddd;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: normal;
+            font-size: 14px;
+            text-transform: none;
+            letter-spacing: 0;
+            transition: all 0.2s;
         }
 
         .rating-group input[type="radio"]:checked + label {
-            background: #00d4ff;
-            color: #0a0a0a;
-            border-color: #00d4ff;
+            background: #111;
+            color: #fff;
+            border-color: #111;
         }
 
         .rating-group label:hover {
-            border-color: #00d4ff;
+            border-color: #111;
         }
 
         .submit-btn {
-            background: #00d4ff;
-            color: #0a0a0a;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
             width: 100%;
-            transition: all 0.3s;
-            font-family: 'IBM Plex Mono', monospace;
-        }
-
-        .submit-btn:hover {
-            background: #00b8e6;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
-        }
-
-        .submit-btn:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-            transform: none;
+            padding: 14px;
+            margin-top: 12px;
         }
 
         .success-message {
-            background: #00d4ff;
-            color: #0a0a0a;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: #111;
+            color: #fff;
+            padding: 16px 20px;
+            margin-bottom: 24px;
             display: none;
-            font-weight: 600;
+            font-size: 14px;
         }
 
         @media (max-width: 600px) {
+            #map-header {
+                padding: 16px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            #map-header h1 {
+                font-size: 12px;
+            }
+
             #add-sauna-btn {
                 bottom: 20px;
                 right: 20px;
                 padding: 12px 20px;
-                font-size: 14px;
             }
 
             .modal-content {
-                margin: 10% auto;
-                padding: 25px;
-                width: 95%;
+                margin: 20px;
+                padding: 32px 24px;
             }
 
-            .modal-content h2 {
-                font-size: 22px;
+            #password-form {
+                padding: 24px;
             }
 
             .rating-group {
                 flex-wrap: wrap;
             }
-            #password-form {
-                padding: 35px;
-                min-width: 0;
-                width: 90%;
-            }
-
-            #map-header h1 {
-                font-size: 20px;
-            }
-
-            #map-header p {
-                font-size: 12px;
-            }
-
-            #map-header {
-                padding: 15px 20px;
-            }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-            20%, 40%, 60%, 80% { transform: translateX(8px); }
         }
     </style>
 </head>
@@ -466,32 +480,32 @@
     <!-- Password Screen -->
     <div id="password-screen">
         <div id="password-form">
-            <h2>GREATER LONDON SAUNA MAP</h2>
+            <h2>Greater London Sauna Map</h2>
             <input type="password" id="password-input" placeholder="Enter password" autocomplete="off" />
-            <button onclick="checkPassword()">ENTER</button>
-            <div class="error" id="error-message">Incorrect password. Please try again.</div>
+            <button onclick="checkPassword()">Enter</button>
+            <div class="error" id="error-message">Incorrect password</div>
         </div>
     </div>
 
     <!-- Map Screen -->
     <div id="map-screen">
         <div id="map-header">
-            <h1>GREATER LONDON SAUNA MAP</h1>
-            <p>42 SAUNAS MAPPED</p>
+            <h1>Greater London Sauna Map</h1>
+            <p>42 locations</p>
         </div>
         <div id="map"></div>
-        <button id="add-sauna-btn">+ ADD SAUNA</button>
+        <button id="add-sauna-btn">+ Add Sauna</button>
     </div>
 
     <!-- Add/Review Sauna Modal -->
     <div id="sauna-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>ADD OR REVIEW A SAUNA</h2>
-            <p>Know a great sauna we're missing? Share it with the community!</p>
+            <h2>Add or Review a Sauna</h2>
+            <p>Know a great sauna we're missing? Share it with the community.</p>
 
             <div id="success-msg" class="success-message">
-                ✓ Thank you! Your submission has been received.
+                Thank you. Your submission has been received.
             </div>
 
             <form id="sauna-form">
@@ -504,7 +518,6 @@
                     </select>
                 </div>
 
-                <!-- Common fields -->
                 <div class="form-group" id="sauna-select-group" style="display: none;">
                     <label for="existing-sauna">Select Sauna</label>
                     <select id="existing-sauna">
@@ -513,12 +526,12 @@
                 </div>
 
                 <div class="form-group" id="sauna-name-group">
-                    <label for="sauna-name">Sauna Name *</label>
+                    <label for="sauna-name">Sauna Name</label>
                     <input type="text" id="sauna-name" required>
                 </div>
 
                 <div class="form-group" id="sauna-address-group">
-                    <label for="sauna-address">Address *</label>
+                    <label for="sauna-address">Address</label>
                     <input type="text" id="sauna-address" placeholder="Full street address with postcode" required>
                 </div>
 
@@ -527,430 +540,107 @@
                     <input type="url" id="sauna-website" placeholder="https://">
                 </div>
 
-                <!-- Review fields -->
                 <div class="form-group">
-                    <label>Rating *</label>
+                    <label>Rating</label>
                     <div class="rating-group">
                         <input type="radio" name="rating" id="rating-1" value="1">
-                        <label for="rating-1">1⭐</label>
+                        <label for="rating-1">1</label>
                         <input type="radio" name="rating" id="rating-2" value="2">
-                        <label for="rating-2">2⭐</label>
+                        <label for="rating-2">2</label>
                         <input type="radio" name="rating" id="rating-3" value="3">
-                        <label for="rating-3">3⭐</label>
+                        <label for="rating-3">3</label>
                         <input type="radio" name="rating" id="rating-4" value="4">
-                        <label for="rating-4">4⭐</label>
+                        <label for="rating-4">4</label>
                         <input type="radio" name="rating" id="rating-5" value="5">
-                        <label for="rating-5">5⭐</label>
+                        <label for="rating-5">5</label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="review-text">Your Review *</label>
+                    <label for="review-text">Your Review</label>
                     <textarea id="review-text" placeholder="Tell us about your experience..." required></textarea>
-                    <small>What did you love? What could be improved?</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="reviewer-name">Your Name (optional)</label>
+                    <label for="reviewer-name">Your Name</label>
                     <input type="text" id="reviewer-name" placeholder="Anonymous">
                 </div>
 
                 <div class="form-group">
-                    <label for="reviewer-email">Your Email (optional)</label>
-                    <input type="email" id="reviewer-email" placeholder="For follow-up only, not published">
+                    <label for="reviewer-email">Your Email</label>
+                    <input type="email" id="reviewer-email" placeholder="For follow-up only">
                     <small>We'll only use this to contact you about your submission</small>
                 </div>
 
-                <button type="submit" class="submit-btn">SUBMIT</button>
+                <button type="submit" class="submit-btn">Submit</button>
             </form>
         </div>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
     <script>
         // Password hash (SHA-256 of 'shvitz')
         const PASSWORD_HASH = 'ebbfe519cebbbb572da632ae0263eeac94b828b4e27a3e55f271242060580df6';
 
-        // Embedded sauna data
+        // Sauna data
         const saunaData = [
-  {
-    "name": "ARC",
-    "address": "Minus Level 2, 1 Crossrail Place, Canary Wharf, London E14 5AR",
-    "url": "https://saunamap.uk/sauna/arc/",
-    "lat": 51.5048954,
-    "lon": -0.0190006,
-    "hours": null,
-    "website": "https://www.arc-community.com/"
-  },
-  {
-    "name": "Banya No.1 Chiswick",
-    "address": "404-406 Chiswick High Road, London W4 5TF",
-    "url": "https://saunamap.uk/sauna/banya-no-1-chiswick/",
-    "lat": 51.4923137,
-    "lon": -0.263818,
-    "hours": null,
-    "website": "https://gobanyachiswick.co.uk/"
-  },
-  {
-    "name": "Banya No.1 Hoxton",
-    "address": "17 Micawber Street, London N1 7TB",
-    "url": "https://saunamap.uk/sauna/banya-no-1-hoxton/",
-    "lat": 51.5323935,
-    "lon": -0.086078,
-    "hours": null,
-    "website": "https://gobanya.co.uk/"
-  },
-  {
-    "name": "BlocFit Climbing Wall",
-    "address": "Arch 266, 241 Coldharbour Lane, London SW9 8RR",
-    "url": "https://saunamap.uk/sauna/blocfit-climbing-wall/",
-    "lat": 51.4662551,
-    "lon": -0.1021612,
-    "hours": null,
-    "website": "https://www.blocfit.co.uk/"
-  },
-  {
-    "name": "Blok Hot+Cold",
-    "address": "Unit UJ5, The Tram Depot, 38-40 Upper Clapton Road, London E5 8BQ",
-    "url": "https://saunamap.uk/sauna/hot-cold-blok/",
-    "lat": 51.558602,
-    "lon": -0.0558777,
-    "hours": null,
-    "website": "https://www.bloklondon.com/hotcold"
-  },
-  {
-    "name": "Community Sauna Baths, Camberwell",
-    "address": "Ruskin Park, Denmark Hill, London SE5 9AW",
-    "url": "https://saunamap.uk/sauna/community-sauna-baths-3/",
-    "lat": 51.4745706,
-    "lon": -0.0925416,
-    "hours": null,
-    "website": "https://www.community-sauna.co.uk/"
-  },
-  {
-    "name": "Community Sauna Baths, Hackney",
-    "address": "The Baths 80, Eastway, London E9 5JH",
-    "url": "https://saunamap.uk/sauna/community-sauna-baths-2/",
-    "lat": 51.5434383,
-    "lon": -0.0241542,
-    "hours": null,
-    "website": "https://www.community-sauna.co.uk/"
-  },
-  {
-    "name": "Community Sauna Baths, Peckham",
-    "address": "64 Glengall Road, Glengall Wharf Garden, Burgess Park, London SE15 6NH",
-    "url": "https://saunamap.uk/sauna/community-sauna-baths-peckham/",
-    "lat": 51.4734122,
-    "lon": -0.0699321,
-    "hours": null,
-    "website": "https://www.community-sauna.co.uk/"
-  },
-  {
-    "name": "Community Sauna Baths, Stratford",
-    "address": "Stratford, London E15",
-    "url": "https://saunamap.uk/sauna/community-sauna-baths/",
-    "lat": 51.541289,
-    "lon": -0.0035472,
-    "hours": null,
-    "website": "https://www.community-sauna.co.uk/"
-  },
-  {
-    "name": "Community Sauna Baths, Walthamstow",
-    "address": "Walthamstow, London E17",
-    "url": "https://saunamap.uk/sauna/community-sauna-baths-walthamstow/",
-    "lat": 51.5844701,
-    "lon": -0.0188186,
-    "hours": null,
-    "website": "https://www.community-sauna.co.uk/"
-  },
-  {
-    "name": "Contrast Anerley",
-    "address": "Unit 106, 183A Anerley Road, London SE20 8EF",
-    "url": "https://saunamap.uk/sauna/contrast-annerley/",
-    "lat": 51.4088267,
-    "lon": -0.0611263,
-    "hours": null,
-    "website": "https://www.contrastlondon.co.uk/"
-  },
-  {
-    "name": "Devon Sauna Hub, London",
-    "address": "Beckenham, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/devon-sauna-hub/",
-    "lat": 51.4070938,
-    "lon": -0.0303183,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/devon-sauna-hub/"
-  },
-  {
-    "name": "Drip Sauna",
-    "address": "Coaling Jetty, Battersea Power Station, London SW11 8BZ",
-    "url": "https://saunamap.uk/sauna/drip-sauna/",
-    "lat": 51.4707933,
-    "lon": -0.172214,
-    "hours": null,
-    "website": "https://www.dripsauna.co.uk/"
-  },
-  {
-    "name": "Finnish Church in London",
-    "address": "33 Albion Street, Rotherhithe, London SE16 7HZ",
-    "url": "https://saunamap.uk/sauna/finnish-church/",
-    "lat": 51.5002908,
-    "lon": -0.0436321,
-    "hours": null,
-    "website": "https://britannia.merimieskirkko.fi/en/"
-  },
-  {
-    "name": "Hot & Cold UK",
-    "address": "662 High Road Leytonstone, London E11 3AA",
-    "url": "https://saunamap.uk/sauna/hot-cold-uk/",
-    "lat": 51.5683955,
-    "lon": 0.0111704,
-    "hours": null,
-    "website": "https://hotandcoldonline.co.uk/"
-  },
-  {
-    "name": "HotBox Seaside",
-    "address": "Benone, County Londonderry, Northern Ireland, United Kingdom",
-    "url": "https://saunamap.uk/sauna/hot-box-seaside/",
-    "lat": 55.1807856,
-    "lon": -6.9292781,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/hot-box-seaside/"
-  },
-  {
-    "name": "Innervisions Alchemy",
-    "address": "Bermondsey, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/innervisions-sauna/",
-    "lat": 51.4970125,
-    "lon": -0.063268,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/innervisions-sauna/"
-  },
-  {
-    "name": "Little Healing",
-    "address": "Ealing, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/little-healing/",
-    "lat": 51.5126553,
-    "lon": -0.3051952,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/little-healing/"
-  },
-  {
-    "name": "LoWLU, Kentish Town",
-    "address": "Caversham Road, Kentish Town, London NW5",
-    "url": "https://saunamap.uk/sauna/lowlu-kentish-town/",
-    "lat": 51.5500554,
-    "lon": -0.1425712,
-    "hours": null,
-    "website": "https://www.lowlu.co/"
-  },
-  {
-    "name": "LoWLU, Wandsworth",
-    "address": "Wandsworth, London SW18",
-    "url": "https://saunamap.uk/sauna/lowlu-sauna/",
-    "lat": 51.4570271,
-    "lon": -0.1932607,
-    "hours": null,
-    "website": "https://www.lowlu.co/"
-  },
-  {
-    "name": "Mile End Climbing Wall",
-    "address": "Haverfield Road, Mile End Park, London E3 5BE",
-    "url": "https://saunamap.uk/sauna/mile-end-climbing-wall/",
-    "lat": 51.5253378,
-    "lon": -0.033435,
-    "hours": null,
-    "website": "https://www.mileendwall.org.uk/"
-  },
-  {
-    "name": "New Docklands Steam Baths",
-    "address": "30a Stephenson Street, Canning Town, London E16 4SA",
-    "url": "https://saunamap.uk/sauna/new-docklands-steam-baths/",
-    "lat": 51.5139887,
-    "lon": 0.0082987,
-    "hours": null,
-    "website": "https://newdocklands.uk/"
-  },
-  {
-    "name": "Old Kent Road Sauna",
-    "address": "Old Kent Road, London SE15",
-    "url": "https://saunamap.uk/sauna/old-kent-road-sauna/",
-    "lat": 51.4752983,
-    "lon": -0.0404289,
-    "hours": null,
-    "website": "https://www.oldkentroadsauna.com/"
-  },
-  {
-    "name": "Porchester Spa",
-    "address": "Porchester Centre, Porchester Road, Queensway, London W2 5HS",
-    "url": "https://saunamap.uk/sauna/porchester-spa/",
-    "lat": 51.5122764,
-    "lon": -0.1883854,
-    "hours": null,
-    "website": "https://www.porchesterspatreatments.co.uk/"
-  },
-  {
-    "name": "Putney Recovery Room",
-    "address": "Putney, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/putney-recovery-room/",
-    "lat": 51.4625314,
-    "lon": -0.2163018,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/putney-recovery-room/"
-  },
-  {
-    "name": "Rebase",
-    "address": "1a St Vincent Street, Marylebone, London W1U 4DA",
-    "url": "https://saunamap.uk/sauna/rebase/",
-    "lat": 51.5196374,
-    "lon": -0.1519627,
-    "hours": null,
-    "website": "https://www.rebaserecovery.com/"
-  },
-  {
-    "name": "Revitalise Urban Spa",
-    "address": "Lower Clapton, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/revitalise-urban-spa/",
-    "lat": 51.5546565,
-    "lon": -0.0550912,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/revitalise-urban-spa/"
-  },
-  {
-    "name": "Rooftop Saunas, Brixton",
-    "address": "International House, 11th Floor, Brixton, London SW9",
-    "url": "https://saunamap.uk/sauna/rooftop-saunas/",
-    "lat": 51.4633914,
-    "lon": -0.1148023,
-    "hours": null,
-    "website": "https://rooftopsaunas.com/"
-  },
-  {
-    "name": "Rooftop Saunas, Hackney",
-    "address": "Netil Corner, 2 Bocking Street, London E8 4RU",
-    "url": "https://saunamap.uk/sauna/rooftop-saunas-2/",
-    "lat": 51.5432402,
-    "lon": -0.0493621,
-    "hours": null,
-    "website": "https://rooftopsaunas.com/"
-  },
-  {
-    "name": "Sauna & Plunge",
-    "address": "124 Tabernacle Street, Shoreditch, London EC2A 4SA",
-    "url": "https://saunamap.uk/sauna/sauna-plunge/",
-    "lat": 51.5266694,
-    "lon": -0.0798926,
-    "hours": null,
-    "website": "https://saunaandplunge.life/"
-  },
-  {
-    "name": "Sauna and Sea",
-    "address": "Portstewart, County Londonderry, Northern Ireland, United Kingdom",
-    "url": "https://saunamap.uk/sauna/sauna-sea/",
-    "lat": 55.1829096,
-    "lon": -6.7187008,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/sauna-sea/"
-  },
-  {
-    "name": "Sauna Social Club",
-    "address": "Railway Arch 842, Brayards Road, Peckham, London SE15 2AG",
-    "url": "https://saunamap.uk/sauna/sauna-social-club/",
-    "lat": 51.4734122,
-    "lon": -0.0699321,
-    "hours": null,
-    "website": "https://www.saunasocialclub.co.uk/"
-  },
-  {
-    "name": "Saunos",
-    "address": "49-50 Eagle Wharf Road, London N1 7ED",
-    "url": "https://saunamap.uk/sauna/saunos/",
-    "lat": 51.5323935,
-    "lon": -0.086078,
-    "hours": null,
-    "website": "https://www.legitfit.com/p/timetable/saunoslimited"
-  },
-  {
-    "name": "Skuna Sauna, London",
-    "address": "West India Quay, Hertsmere Road, Canary Wharf, London E14 4AL",
-    "url": "https://saunamap.uk/sauna/floating-sauna-london/",
-    "lat": 51.5048954,
-    "lon": -0.0190006,
-    "hours": null,
-    "website": "https://www.skunasauna.com/"
-  },
-  {
-    "name": "Stoke Newington Sauna",
-    "address": "Stoke Newington, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/stoke-newington-sauna/",
-    "lat": 51.5578698,
-    "lon": -0.0822482,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/stoke-newington-sauna/"
-  },
-  {
-    "name": "SweHeat Sauna",
-    "address": "Canning Town, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/sweheat-sauna/",
-    "lat": 51.5139887,
-    "lon": 0.0082987,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/sweheat-sauna/"
-  },
-  {
-    "name": "Temz Floating Saunas",
-    "address": "The Lensbury, Broom Road, Teddington, London TW11 9NU",
-    "url": "https://saunamap.uk/sauna/temz-floating-saunas/",
-    "lat": 51.4277844,
-    "lon": -0.333653,
-    "hours": null,
-    "website": "https://www.temzfloatingsaunas.com/"
-  },
-  {
-    "name": "The Bath House",
-    "address": "1 Grosvenor Gardens, Belgravia, London SW1W 0BD",
-    "url": "https://saunamap.uk/sauna/the-bath-house/",
-    "lat": 51.4982128,
-    "lon": -0.1534998,
-    "hours": null,
-    "website": "https://banyalondon.co.uk/"
-  },
-  {
-    "name": "The Cabin Sauna",
-    "address": "Clapham Common, London SW4",
-    "url": "https://saunamap.uk/sauna/the-cabin-sauna/",
-    "lat": 51.4614469,
-    "lon": -0.138627,
-    "hours": null,
-    "website": "https://thecabinsauna.co.uk/"
-  },
-  {
-    "name": "The Sanctuary at &Soul Community",
-    "address": "Shoreditch, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/the-sanctuary-at-soul/",
-    "lat": 51.5266694,
-    "lon": -0.0798926,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/the-sanctuary-at-soul/"
-  },
-  {
-    "name": "Urban Heat Sauna",
-    "address": "Camberwell, London, England, United Kingdom",
-    "url": "https://saunamap.uk/sauna/urban-heat-sauna/",
-    "lat": 51.4745706,
-    "lon": -0.0925416,
-    "hours": null,
-    "website": "https://saunamap.uk/sauna/urban-heat-sauna/"
-  },
-  {
-    "name": "WellNest",
-    "address": "7 Crucifix Lane, London Bridge, London SE1 3JW",
-    "url": "https://saunamap.uk/sauna/wellnest/",
-    "lat": 51.5061349,
-    "lon": -0.1011379,
-    "hours": null,
-    "website": "https://www.wellnest.london/"
-  }
-];
+            {"name": "ARC", "address": "Minus Level 2, 1 Crossrail Place, Canary Wharf, London E14 5AR", "lat": 51.5048954, "lon": -0.0190006, "website": "https://www.arc-community.com/"},
+            {"name": "Banya No.1 Chiswick", "address": "404-406 Chiswick High Road, London W4 5TF", "lat": 51.4923137, "lon": -0.263818, "website": "https://gobanyachiswick.co.uk/"},
+            {"name": "Banya No.1 Hoxton", "address": "17 Micawber Street, London N1 7TB", "lat": 51.5323935, "lon": -0.086078, "website": "https://gobanya.co.uk/"},
+            {"name": "BlocFit Climbing Wall", "address": "Arch 266, 241 Coldharbour Lane, London SW9 8RR", "lat": 51.4662551, "lon": -0.1021612, "website": "https://www.blocfit.co.uk/"},
+            {"name": "Blok Hot+Cold", "address": "Unit UJ5, The Tram Depot, 38-40 Upper Clapton Road, London E5 8BQ", "lat": 51.558602, "lon": -0.0558777, "website": "https://www.bloklondon.com/hotcold"},
+            {"name": "Community Sauna Baths, Camberwell", "address": "Ruskin Park, Denmark Hill, London SE5 9AW", "lat": 51.4745706, "lon": -0.0925416, "website": "https://www.community-sauna.co.uk/"},
+            {"name": "Community Sauna Baths, Hackney", "address": "The Baths 80, Eastway, London E9 5JH", "lat": 51.5434383, "lon": -0.0241542, "website": "https://www.community-sauna.co.uk/"},
+            {"name": "Community Sauna Baths, Peckham", "address": "64 Glengall Road, Glengall Wharf Garden, Burgess Park, London SE15 6NH", "lat": 51.4734122, "lon": -0.0699321, "website": "https://www.community-sauna.co.uk/"},
+            {"name": "Community Sauna Baths, Stratford", "address": "Stratford, London E15", "lat": 51.541289, "lon": -0.0035472, "website": "https://www.community-sauna.co.uk/"},
+            {"name": "Community Sauna Baths, Walthamstow", "address": "Walthamstow, London E17", "lat": 51.5844701, "lon": -0.0188186, "website": "https://www.community-sauna.co.uk/"},
+            {"name": "Contrast Anerley", "address": "Unit 106, 183A Anerley Road, London SE20 8EF", "lat": 51.4088267, "lon": -0.0611263, "website": "https://www.contrastlondon.co.uk/"},
+            {"name": "Drip Sauna", "address": "Coaling Jetty, Battersea Power Station, London SW11 8BZ", "lat": 51.4707933, "lon": -0.172214, "website": "https://www.dripsauna.co.uk/"},
+            {"name": "Finnish Church in London", "address": "33 Albion Street, Rotherhithe, London SE16 7HZ", "lat": 51.5002908, "lon": -0.0436321, "website": "https://britannia.merimieskirkko.fi/en/"},
+            {"name": "Hot & Cold UK", "address": "662 High Road Leytonstone, London E11 3AA", "lat": 51.5683955, "lon": 0.0111704, "website": "https://hotandcoldonline.co.uk/"},
+            {"name": "Innervisions Alchemy", "address": "Bermondsey, London", "lat": 51.4970125, "lon": -0.063268, "website": "https://saunamap.uk/sauna/innervisions-sauna/"},
+            {"name": "Little Healing", "address": "Ealing, London", "lat": 51.5126553, "lon": -0.3051952, "website": "https://saunamap.uk/sauna/little-healing/"},
+            {"name": "LoWLU, Kentish Town", "address": "Caversham Road, Kentish Town, London NW5", "lat": 51.5500554, "lon": -0.1425712, "website": "https://www.lowlu.co/"},
+            {"name": "LoWLU, Wandsworth", "address": "Wandsworth, London SW18", "lat": 51.4570271, "lon": -0.1932607, "website": "https://www.lowlu.co/"},
+            {"name": "Mile End Climbing Wall", "address": "Haverfield Road, Mile End Park, London E3 5BE", "lat": 51.5253378, "lon": -0.033435, "website": "https://www.mileendwall.org.uk/"},
+            {"name": "New Docklands Steam Baths", "address": "30a Stephenson Street, Canning Town, London E16 4SA", "lat": 51.5139887, "lon": 0.0082987, "website": "https://newdocklands.uk/"},
+            {"name": "Old Kent Road Sauna", "address": "Old Kent Road, London SE15", "lat": 51.4752983, "lon": -0.0404289, "website": "https://www.oldkentroadsauna.com/"},
+            {"name": "Porchester Spa", "address": "Porchester Centre, Porchester Road, Queensway, London W2 5HS", "lat": 51.5122764, "lon": -0.1883854, "website": "https://www.porchesterspatreatments.co.uk/"},
+            {"name": "Putney Recovery Room", "address": "Putney, London", "lat": 51.4625314, "lon": -0.2163018, "website": "https://saunamap.uk/sauna/putney-recovery-room/"},
+            {"name": "Rebase", "address": "1a St Vincent Street, Marylebone, London W1U 4DA", "lat": 51.5196374, "lon": -0.1519627, "website": "https://www.rebaserecovery.com/"},
+            {"name": "Revitalise Urban Spa", "address": "Lower Clapton, London", "lat": 51.5546565, "lon": -0.0550912, "website": "https://saunamap.uk/sauna/revitalise-urban-spa/"},
+            {"name": "Rooftop Saunas, Brixton", "address": "International House, 11th Floor, Brixton, London SW9", "lat": 51.4633914, "lon": -0.1148023, "website": "https://rooftopsaunas.com/"},
+            {"name": "Rooftop Saunas, Hackney", "address": "Netil Corner, 2 Bocking Street, London E8 4RU", "lat": 51.5432402, "lon": -0.0493621, "website": "https://rooftopsaunas.com/"},
+            {"name": "Sauna & Plunge", "address": "124 Tabernacle Street, Shoreditch, London EC2A 4SA", "lat": 51.5266694, "lon": -0.0798926, "website": "https://saunaandplunge.life/"},
+            {"name": "Sauna Social Club", "address": "Railway Arch 842, Brayards Road, Peckham, London SE15 2AG", "lat": 51.4734122, "lon": -0.0699321, "website": "https://www.saunasocialclub.co.uk/"},
+            {"name": "Saunos", "address": "49-50 Eagle Wharf Road, London N1 7ED", "lat": 51.5323935, "lon": -0.086078, "website": "https://www.legitfit.com/p/timetable/saunoslimited"},
+            {"name": "Skuna Sauna, London", "address": "West India Quay, Hertsmere Road, Canary Wharf, London E14 4AL", "lat": 51.5048954, "lon": -0.0190006, "website": "https://www.skunasauna.com/"},
+            {"name": "Stoke Newington Sauna", "address": "Stoke Newington, London", "lat": 51.5578698, "lon": -0.0822482, "website": "https://saunamap.uk/sauna/stoke-newington-sauna/"},
+            {"name": "SweHeat Sauna", "address": "Canning Town, London", "lat": 51.5139887, "lon": 0.0082987, "website": "https://saunamap.uk/sauna/sweheat-sauna/"},
+            {"name": "Temz Floating Saunas", "address": "The Lensbury, Broom Road, Teddington, London TW11 9NU", "lat": 51.4277844, "lon": -0.333653, "website": "https://www.temzfloatingsaunas.com/"},
+            {"name": "The Bath House", "address": "1 Grosvenor Gardens, Belgravia, London SW1W 0BD", "lat": 51.4982128, "lon": -0.1534998, "website": "https://banyalondon.co.uk/"},
+            {"name": "The Cabin Sauna", "address": "Clapham Common, London SW4", "lat": 51.4614469, "lon": -0.138627, "website": "https://thecabinsauna.co.uk/"},
+            {"name": "The Sanctuary at &Soul Community", "address": "Shoreditch, London", "lat": 51.5266694, "lon": -0.0798926, "website": "https://saunamap.uk/sauna/the-sanctuary-at-soul/"},
+            {"name": "Urban Heat Sauna", "address": "Camberwell, London", "lat": 51.4745706, "lon": -0.0925416, "website": "https://saunamap.uk/sauna/urban-heat-sauna/"},
+            {"name": "WellNest", "address": "7 Crucifix Lane, London Bridge, London SE1 3JW", "lat": 51.5061349, "lon": -0.1011379, "website": "https://www.wellnest.london/"}
+        ];
+
+        // Notes storage
+        function getNotes() {
+            return JSON.parse(localStorage.getItem('saunaNotes') || '{}');
+        }
+
+        function saveNote(saunaName, note) {
+            const notes = getNotes();
+            notes[saunaName] = note;
+            localStorage.setItem('saunaNotes', JSON.stringify(notes));
+        }
+
+        function getNote(saunaName) {
+            return getNotes()[saunaName] || '';
+        }
 
         // Hash password using SHA-256
         async function hashPassword(password) {
@@ -976,56 +666,74 @@
                 errorMsg.style.display = 'block';
                 input.value = '';
                 input.focus();
-
-                // Shake animation
-                input.style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    input.style.animation = '';
-                }, 500);
             }
         }
 
-        // Allow Enter key to submit password
+        // Enter key to submit
         document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('password-input');
             input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
+                if (e.key === 'Enter') checkPassword();
             });
             input.focus();
         });
 
+        // Custom marker icon
+        const customIcon = L.divIcon({
+            className: 'custom-marker',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6],
+            popupAnchor: [0, -8]
+        });
+
         // Initialize map
         function initializeMap() {
-            // Create map centered on London with dark tiles
-            const map = L.map('map').setView([51.5074, -0.1278], 10);
+            const map = L.map('map').setView([51.5074, -0.1278], 11);
 
-            // Dark mode map tiles (CartoDB Dark Matter)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            // Greyscale map tiles (Stadia Alidade Smooth - clean greyscale)
+            L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
                 maxZoom: 19,
-                minZoom: 9
+                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
             }).addTo(map);
 
-            // Add markers for each sauna
+            // Add markers
             saunaData.forEach(sauna => {
-                const marker = L.marker([sauna.lat, sauna.lon]);
+                const marker = L.marker([sauna.lat, sauna.lon], { icon: customIcon });
 
+                const existingNote = getNote(sauna.name);
                 const popupContent = `
-                    <div>
+                    <div class="popup-inner">
                         <h3>${sauna.name}</h3>
-                        <p>${sauna.address}</p>
-                        <a href="${sauna.website}" target="_blank" rel="noopener noreferrer">Visit Website →</a>
+                        <p class="address">${sauna.address}</p>
+                        <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="website-link">Visit Website</a>
+                    </div>
+                    <div class="notes-section">
+                        <label>Your Notes</label>
+                        <textarea id="note-${sauna.name.replace(/[^a-zA-Z0-9]/g, '_')}" placeholder="Add your notes about this sauna...">${existingNote}</textarea>
+                        <button type="button" class="save-note" onclick="handleSaveNote('${sauna.name.replace(/'/g, "\\'")}')">Save Note</button>
+                        <div class="note-saved" id="saved-${sauna.name.replace(/[^a-zA-Z0-9]/g, '_')}">Note saved</div>
                     </div>
                 `;
 
-                marker.bindPopup(popupContent);
+                marker.bindPopup(popupContent, { maxWidth: 320 });
                 marker.addTo(map);
             });
+        }
 
-            // Map starts centered on London (doesn't auto-fit to bounds)
-            // Users can explore and zoom to see all saunas
+        // Handle save note
+        function handleSaveNote(saunaName) {
+            const textareaId = 'note-' + saunaName.replace(/[^a-zA-Z0-9]/g, '_');
+            const savedId = 'saved-' + saunaName.replace(/[^a-zA-Z0-9]/g, '_');
+            const textarea = document.getElementById(textareaId);
+            const savedMsg = document.getElementById(savedId);
+
+            if (textarea) {
+                saveNote(saunaName, textarea.value);
+                savedMsg.style.display = 'block';
+                setTimeout(() => {
+                    savedMsg.style.display = 'none';
+                }, 2000);
+            }
         }
 
         // Modal functionality
@@ -1036,7 +744,7 @@
         const saunaSelect = document.getElementById('existing-sauna');
         const saunaForm = document.getElementById('sauna-form');
 
-        // Populate existing saunas dropdown
+        // Populate dropdown
         saunaData.forEach(sauna => {
             const option = document.createElement('option');
             option.value = sauna.name;
@@ -1044,26 +752,23 @@
             saunaSelect.appendChild(option);
         });
 
-        // Open modal
         addBtn.onclick = () => {
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         };
 
-        // Close modal
         closeBtn.onclick = () => {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
         };
 
-        window.onclick = (event) => {
-            if (event.target === modal) {
+        window.onclick = (e) => {
+            if (e.target === modal) {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         };
 
-        // Handle submission type change
         submissionType.onchange = (e) => {
             const type = e.target.value;
             const saunaSelectGroup = document.getElementById('sauna-select-group');
@@ -1072,27 +777,20 @@
             const saunaWebsiteGroup = document.getElementById('sauna-website-group');
 
             if (type === 'review') {
-                // Show dropdown for existing sauna
                 saunaSelectGroup.style.display = 'block';
                 saunaNameGroup.style.display = 'none';
                 saunaAddressGroup.style.display = 'none';
                 saunaWebsiteGroup.style.display = 'none';
-
-                // Remove required from hidden fields
                 document.getElementById('sauna-name').required = false;
                 document.getElementById('sauna-address').required = false;
             } else if (type === 'new') {
-                // Show input fields for new sauna
                 saunaSelectGroup.style.display = 'none';
                 saunaNameGroup.style.display = 'block';
                 saunaAddressGroup.style.display = 'block';
                 saunaWebsiteGroup.style.display = 'block';
-
-                // Add required to visible fields
                 document.getElementById('sauna-name').required = true;
                 document.getElementById('sauna-address').required = true;
             } else {
-                // Hide all
                 saunaSelectGroup.style.display = 'none';
                 saunaNameGroup.style.display = 'none';
                 saunaAddressGroup.style.display = 'none';
@@ -1100,7 +798,6 @@
             }
         };
 
-        // Handle form submission
         saunaForm.onsubmit = (e) => {
             e.preventDefault();
 
@@ -1117,32 +814,19 @@
                 timestamp: new Date().toISOString()
             };
 
-            // Store in localStorage for demonstration
-            // In production, this would send to a backend API
             const submissions = JSON.parse(localStorage.getItem('saunaSubmissions') || '[]');
             submissions.push(formData);
             localStorage.setItem('saunaSubmissions', JSON.stringify(submissions));
 
-            // Show success message
             document.getElementById('success-msg').style.display = 'block';
             saunaForm.reset();
 
-            // Hide success message after 3 seconds and close modal
             setTimeout(() => {
                 document.getElementById('success-msg').style.display = 'none';
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
-            }, 3000);
-
-            // Log for demonstration
-            console.log('Submission saved:', formData);
-            console.log('Total submissions:', submissions.length);
+            }, 2500);
         };
     </script>
-
-    <!-- Leaflet.js library -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
 </body>
 </html>
