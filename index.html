@@ -289,6 +289,58 @@
             border-color: #2a2520;
         }
 
+        .favorite-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+
+        .favorite-btn:hover {
+            opacity: 0.7;
+        }
+
+        .favorite-btn.favorited {
+            opacity: 1;
+            color: #c44;
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .popup-header h3 {
+            flex: 1;
+        }
+
+        .price-tag {
+            font-size: 12px;
+            color: #6b6156;
+            background: #ebe5db;
+            padding: 3px 8px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .list-item .list-favorite {
+            float: right;
+            font-size: 18px;
+            opacity: 0.3;
+        }
+
+        .list-item .list-favorite.favorited {
+            opacity: 1;
+            color: #c44;
+        }
+
         .list-item .list-link {
             font-size: 11px;
             color: #2a2520;
@@ -751,6 +803,7 @@
                 <button class="sort-btn active" id="sort-alpha">A–Z</button>
                 <button class="sort-btn" id="sort-distance">Nearest</button>
                 <button class="sort-btn" id="sort-open">Open Now</button>
+                <button class="sort-btn" id="sort-favorites">♥ Favorites</button>
             </div>
             <div id="list-view"></div>
         </div>
@@ -846,45 +899,45 @@
 
         // Sauna data
         const saunaData = [
-            {"name": "ARC", "address": "Minus Level 2, 1 Crossrail Place, Canary Wharf, London E14 5AR", "lat": 51.5048954, "lon": -0.0190006, "website": "https://www.arc-community.com/", "hours": "Daily, session-based booking"},
-            {"name": "Banya No.1 Chiswick", "address": "404-406 Chiswick High Road, London W4 5TF", "lat": 51.4923137, "lon": -0.263818, "website": "https://gobanyachiswick.co.uk/", "hours": "Daily 9:30am–10:30pm"},
-            {"name": "Banya No.1 Hoxton", "address": "17 Micawber Street, London N1 7TB", "lat": 51.5323935, "lon": -0.086078, "website": "https://gobanya.co.uk/", "hours": "Daily 9:30am–10:30pm"},
-            {"name": "BlocFit Climbing Wall", "address": "Arch 266, 241 Coldharbour Lane, London SW9 8RR", "lat": 51.4662551, "lon": -0.1021612, "website": "https://www.blocfit.co.uk/", "hours": "Daily, check website for times"},
-            {"name": "Blok Hot+Cold", "address": "Unit UJ5, The Tram Depot, 38-40 Upper Clapton Road, London E5 8BQ", "lat": 51.558602, "lon": -0.0558777, "website": "https://www.bloklondon.com/hotcold", "hours": "Mon–Fri 6am–9:30pm, Sat 8:30am–6pm, Sun 9am–5:30pm"},
-            {"name": "Community Sauna Baths, Camberwell", "address": "Ruskin Park, Denmark Hill, London SE5 9AW", "lat": 51.4745706, "lon": -0.0925416, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm"},
-            {"name": "Community Sauna Baths, Hackney", "address": "The Baths 80, Eastway, London E9 5JH", "lat": 51.5434383, "lon": -0.0241542, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 8am–9:30pm"},
-            {"name": "Community Sauna Baths, Peckham", "address": "64 Glengall Road, Glengall Wharf Garden, Burgess Park, London SE15 6NH", "lat": 51.4734122, "lon": -0.0699321, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm"},
-            {"name": "Community Sauna Baths, Stratford", "address": "Stratford, London E15", "lat": 51.541289, "lon": -0.0035472, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm"},
-            {"name": "Community Sauna Baths, Walthamstow", "address": "Walthamstow, London E17", "lat": 51.5844701, "lon": -0.0188186, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm"},
-            {"name": "Contrast Anerley", "address": "Unit 106, 183A Anerley Road, London SE20 8EF", "lat": 51.4088267, "lon": -0.0611263, "website": "https://www.contrastlondon.co.uk/", "hours": "By appointment, book 6hrs ahead"},
-            {"name": "Drip Sauna", "address": "Coaling Jetty, Battersea Power Station, London SW11 8BZ", "lat": 51.4707933, "lon": -0.172214, "website": "https://www.dripsauna.co.uk/", "hours": "Daily, session-based booking"},
-            {"name": "Finnish Church in London", "address": "33 Albion Street, Rotherhithe, London SE16 7HZ", "lat": 51.5002908, "lon": -0.0436321, "website": "https://britannia.merimieskirkko.fi/en/", "hours": "Wed–Sun, check website"},
-            {"name": "Hot & Cold UK", "address": "662 High Road Leytonstone, London E11 3AA", "lat": 51.5683955, "lon": 0.0111704, "website": "https://hotandcoldonline.co.uk/", "hours": "Daily 6am–9pm"},
-            {"name": "Innervisions Alchemy", "address": "Rollins Street, London SE15 1EP", "lat": 51.4970125, "lon": -0.063268, "website": "https://www.innervisionsalchemy.co.uk/", "hours": "Check website"},
-            {"name": "Little Healing", "address": "1 New Mount Court, Julien Road, London W5 4XA", "lat": 51.5126553, "lon": -0.3051952, "website": "https://www.littlehealing.co.uk/", "hours": "By appointment, 45-min sessions"},
-            {"name": "LoWLU, Kentish Town", "address": "Caversham Road, Kentish Town, London NW5", "lat": 51.5500554, "lon": -0.1425712, "website": "https://www.lowlu.co/", "hours": "Daily 7am–9pm"},
-            {"name": "LoWLU, Wandsworth", "address": "Wandsworth, London SW18", "lat": 51.4570271, "lon": -0.1932607, "website": "https://www.lowlu.co/", "hours": "Daily 6am–9pm"},
-            {"name": "Mile End Climbing Wall", "address": "Haverfield Road, Mile End Park, London E3 5BE", "lat": 51.5253378, "lon": -0.033435, "website": "https://www.mileendwall.org.uk/", "hours": "Mon–Fri 7am–10pm, Sat–Sun 9am–8pm"},
-            {"name": "New Docklands Steam Baths", "address": "30a Stephenson Street, Canning Town, London E16 4SA", "lat": 51.5139887, "lon": 0.0082987, "website": "https://newdocklands.uk/", "hours": "Tue–Sun, varies by day"},
-            {"name": "Old Kent Road Sauna", "address": "Old Kent Road, London SE15", "lat": 51.4752983, "lon": -0.0404289, "website": "https://www.oldkentroadsauna.com/", "hours": "Check website"},
-            {"name": "Porchester Spa", "address": "Porchester Centre, Porchester Road, Queensway, London W2 5HS", "lat": 51.5122764, "lon": -0.1883854, "website": "https://www.porchesterspatreatments.co.uk/", "hours": "Mon–Fri 10am–9:30pm, Sat–Sun 10am–8pm"},
-            {"name": "Putney Recovery Room", "address": "Putney, London SW15", "lat": 51.4625314, "lon": -0.2163018, "website": "https://www.putneyrecovery.com/", "hours": "Check website"},
-            {"name": "Rebase", "address": "1a St Vincent Street, Marylebone, London W1U 4DA", "lat": 51.5196374, "lon": -0.1519627, "website": "https://www.rebaserecovery.com/", "hours": "Mon–Fri 7am–9pm, Sat–Sun 8am–8pm"},
-            {"name": "Revitalise Urban Spa", "address": "2 Maple Path, Lower Clapton, London E5 8FD", "lat": 51.5546565, "lon": -0.0550912, "website": "https://www.revitaliseurbanspa.co.uk/", "hours": "Check website"},
-            {"name": "Rooftop Saunas, Brixton", "address": "International House, 11th Floor, Brixton, London SW9", "lat": 51.4633914, "lon": -0.1148023, "website": "https://rooftopsaunas.com/", "hours": "Mon–Sat 8am–10:20pm, Sun 9am–7:40pm"},
-            {"name": "Rooftop Saunas, Hackney", "address": "Netil Corner, 2 Bocking Street, London E8 4RU", "lat": 51.5432402, "lon": -0.0493621, "website": "https://rooftopsaunas.com/", "hours": "Mon–Sat 7:30am–10:20pm, Sun 10am–7:50pm"},
-            {"name": "Sauna & Plunge", "address": "124 Tabernacle Street, Shoreditch, London EC2A 4SA", "lat": 51.5266694, "lon": -0.0798926, "website": "https://saunaandplunge.life/", "hours": "Daily 6:30am–8pm"},
-            {"name": "Sauna Social Club", "address": "Railway Arch 842, Brayards Road, Peckham, London SE15 2AG", "lat": 51.4734122, "lon": -0.0699321, "website": "https://www.saunasocialclub.co.uk/", "hours": "Wed–Sun, session-based"},
-            {"name": "Saunos", "address": "49-50 Eagle Wharf Road, London N1 7ED", "lat": 51.5323935, "lon": -0.086078, "website": "https://www.legitfit.com/p/timetable/saunoslimited", "hours": "Check website for sessions"},
-            {"name": "Skuna Sauna, London", "address": "West India Quay, Hertsmere Road, Canary Wharf, London E14 4AL", "lat": 51.5048954, "lon": -0.0190006, "website": "https://www.skunasauna.com/", "hours": "Mon–Fri 12pm–9pm, Sat–Sun 10am–9pm"},
-            {"name": "Stoke Newington Sauna", "address": "129 Stoke Newington High St, London N16 0PH", "lat": 51.5578698, "lon": -0.0822482, "website": "https://stokenewingtonsauna.com/", "hours": "Check website"},
-            {"name": "SweHeat Sauna", "address": "1 Dock Rd, Royal Victoria Dock, London E16 1AH", "lat": 51.5078, "lon": 0.0178, "website": "https://www.sweheatsauna.co.uk/", "hours": "Check website"},
-            {"name": "Temz Floating Saunas", "address": "The Lensbury, Broom Road, Teddington, London TW11 9NU", "lat": 51.4277844, "lon": -0.333653, "website": "https://www.temzfloatingsaunas.com/", "hours": "By appointment, 50-min sessions"},
-            {"name": "The Bath House", "address": "1 Grosvenor Gardens, Belgravia, London SW1W 0BD", "lat": 51.4982128, "lon": -0.1534998, "website": "https://banyalondon.co.uk/", "hours": "Mon–Sat 10am–11pm, Sun 10am–10pm"},
-            {"name": "The Cabin Sauna", "address": "Clapham Common, London SW4", "lat": 51.4614469, "lon": -0.138627, "website": "https://thecabinsauna.co.uk/", "hours": "Seasonal (Oct–May), check website"},
-            {"name": "The Sanctuary at &Soul", "address": "114 Cheshire Street, London E2 6EJ", "lat": 51.5225, "lon": -0.0665, "website": "https://andsoul.com/locations/shoreditch/the-sanctuary", "hours": "Check website"},
-            {"name": "Urban Heat Sauna", "address": "347 Camberwell Station Road, London SE5 9JN", "lat": 51.4683, "lon": -0.0912, "website": "https://www.urbanheatwellness.com/", "hours": "Check website"},
-            {"name": "WellNest", "address": "7 Crucifix Lane, London Bridge, London SE1 3JW", "lat": 51.5061349, "lon": -0.1011379, "website": "https://www.wellnest.london/", "hours": "Mon–Fri 7am–10pm, Sat 9am–6pm, Sun 10am–5pm"}
+            {"name": "ARC", "address": "Minus Level 2, 1 Crossrail Place, Canary Wharf, London E14 5AR", "lat": 51.5048954, "lon": -0.0190006, "website": "https://www.arc-community.com/", "hours": "Daily, session-based booking", "price": "£££"},
+            {"name": "Banya No.1 Chiswick", "address": "404-406 Chiswick High Road, London W4 5TF", "lat": 51.4923137, "lon": -0.263818, "website": "https://gobanyachiswick.co.uk/", "hours": "Daily 9:30am–10:30pm", "price": "£££"},
+            {"name": "Banya No.1 Hoxton", "address": "17 Micawber Street, London N1 7TB", "lat": 51.5323935, "lon": -0.086078, "website": "https://gobanya.co.uk/", "hours": "Daily 9:30am–10:30pm", "price": "£££"},
+            {"name": "BlocFit Climbing Wall", "address": "Arch 266, 241 Coldharbour Lane, London SW9 8RR", "lat": 51.4662551, "lon": -0.1021612, "website": "https://www.blocfit.co.uk/", "hours": "Daily, check website for times", "price": "££"},
+            {"name": "Blok Hot+Cold", "address": "Unit UJ5, The Tram Depot, 38-40 Upper Clapton Road, London E5 8BQ", "lat": 51.558602, "lon": -0.0558777, "website": "https://www.bloklondon.com/hotcold", "hours": "Mon–Fri 6am–9:30pm, Sat 8:30am–6pm, Sun 9am–5:30pm", "price": "££"},
+            {"name": "Community Sauna Baths, Camberwell", "address": "Ruskin Park, Denmark Hill, London SE5 9AW", "lat": 51.4745706, "lon": -0.0925416, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm", "price": "£"},
+            {"name": "Community Sauna Baths, Hackney", "address": "The Baths 80, Eastway, London E9 5JH", "lat": 51.5434383, "lon": -0.0241542, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 8am–9:30pm", "price": "£"},
+            {"name": "Community Sauna Baths, Peckham", "address": "64 Glengall Road, Glengall Wharf Garden, Burgess Park, London SE15 6NH", "lat": 51.4734122, "lon": -0.0699321, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm", "price": "£"},
+            {"name": "Community Sauna Baths, Stratford", "address": "Stratford, London E15", "lat": 51.541289, "lon": -0.0035472, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm", "price": "£"},
+            {"name": "Community Sauna Baths, Walthamstow", "address": "Walthamstow, London E17", "lat": 51.5844701, "lon": -0.0188186, "website": "https://www.community-sauna.co.uk/", "hours": "Daily 7am–9:30pm", "price": "£"},
+            {"name": "Contrast Anerley", "address": "Unit 106, 183A Anerley Road, London SE20 8EF", "lat": 51.4088267, "lon": -0.0611263, "website": "https://www.contrastlondon.co.uk/", "hours": "By appointment, book 6hrs ahead", "price": "££"},
+            {"name": "Drip Sauna", "address": "Coaling Jetty, Battersea Power Station, London SW11 8BZ", "lat": 51.4707933, "lon": -0.172214, "website": "https://www.dripsauna.co.uk/", "hours": "Daily, session-based booking", "price": "£££"},
+            {"name": "Finnish Church in London", "address": "33 Albion Street, Rotherhithe, London SE16 7HZ", "lat": 51.5002908, "lon": -0.0436321, "website": "https://britannia.merimieskirkko.fi/en/", "hours": "Wed–Sun, check website", "price": "£"},
+            {"name": "Hot & Cold UK", "address": "662 High Road Leytonstone, London E11 3AA", "lat": 51.5683955, "lon": 0.0111704, "website": "https://hotandcoldonline.co.uk/", "hours": "Daily 6am–9pm", "price": "££"},
+            {"name": "Innervisions Alchemy", "address": "Rollins Street, London SE15 1EP", "lat": 51.4970125, "lon": -0.063268, "website": "https://www.innervisionsalchemy.co.uk/", "hours": "Check website", "price": "££"},
+            {"name": "Little Healing", "address": "1 New Mount Court, Julien Road, London W5 4XA", "lat": 51.5126553, "lon": -0.3051952, "website": "https://www.littlehealing.co.uk/", "hours": "By appointment, 45-min sessions", "price": "££"},
+            {"name": "LoWLU, Kentish Town", "address": "Caversham Road, Kentish Town, London NW5", "lat": 51.5500554, "lon": -0.1425712, "website": "https://www.lowlu.co/", "hours": "Daily 7am–9pm", "price": "££"},
+            {"name": "LoWLU, Wandsworth", "address": "Wandsworth, London SW18", "lat": 51.4570271, "lon": -0.1932607, "website": "https://www.lowlu.co/", "hours": "Daily 6am–9pm", "price": "££"},
+            {"name": "Mile End Climbing Wall", "address": "Haverfield Road, Mile End Park, London E3 5BE", "lat": 51.5253378, "lon": -0.033435, "website": "https://www.mileendwall.org.uk/", "hours": "Mon–Fri 7am–10pm, Sat–Sun 9am–8pm", "price": "£"},
+            {"name": "New Docklands Steam Baths", "address": "30a Stephenson Street, Canning Town, London E16 4SA", "lat": 51.5139887, "lon": 0.0082987, "website": "https://newdocklands.uk/", "hours": "Tue–Sun, varies by day", "price": "£"},
+            {"name": "Old Kent Road Sauna", "address": "Old Kent Road, London SE15", "lat": 51.4752983, "lon": -0.0404289, "website": "https://www.oldkentroadsauna.com/", "hours": "Check website", "price": "££"},
+            {"name": "Porchester Spa", "address": "Porchester Centre, Porchester Road, Queensway, London W2 5HS", "lat": 51.5122764, "lon": -0.1883854, "website": "https://www.porchesterspatreatments.co.uk/", "hours": "Mon–Fri 10am–9:30pm, Sat–Sun 10am–8pm", "price": "£"},
+            {"name": "Putney Recovery Room", "address": "Putney, London SW15", "lat": 51.4625314, "lon": -0.2163018, "website": "https://www.putneyrecovery.com/", "hours": "Check website", "price": "££"},
+            {"name": "Rebase", "address": "1a St Vincent Street, Marylebone, London W1U 4DA", "lat": 51.5196374, "lon": -0.1519627, "website": "https://www.rebaserecovery.com/", "hours": "Mon–Fri 7am–9pm, Sat–Sun 8am–8pm", "price": "£££"},
+            {"name": "Revitalise Urban Spa", "address": "2 Maple Path, Lower Clapton, London E5 8FD", "lat": 51.5546565, "lon": -0.0550912, "website": "https://www.revitaliseurbanspa.co.uk/", "hours": "Check website", "price": "££"},
+            {"name": "Rooftop Saunas, Brixton", "address": "International House, 11th Floor, Brixton, London SW9", "lat": 51.4633914, "lon": -0.1148023, "website": "https://rooftopsaunas.com/", "hours": "Mon–Sat 8am–10:20pm, Sun 9am–7:40pm", "price": "££"},
+            {"name": "Rooftop Saunas, Hackney", "address": "Netil Corner, 2 Bocking Street, London E8 4RU", "lat": 51.5432402, "lon": -0.0493621, "website": "https://rooftopsaunas.com/", "hours": "Mon–Sat 7:30am–10:20pm, Sun 10am–7:50pm", "price": "££"},
+            {"name": "Sauna & Plunge", "address": "124 Tabernacle Street, Shoreditch, London EC2A 4SA", "lat": 51.5266694, "lon": -0.0798926, "website": "https://saunaandplunge.life/", "hours": "Daily 6:30am–8pm", "price": "££"},
+            {"name": "Sauna Social Club", "address": "Railway Arch 842, Brayards Road, Peckham, London SE15 2AG", "lat": 51.4734122, "lon": -0.0699321, "website": "https://www.saunasocialclub.co.uk/", "hours": "Wed–Sun, session-based", "price": "££"},
+            {"name": "Saunos", "address": "49-50 Eagle Wharf Road, London N1 7ED", "lat": 51.5323935, "lon": -0.086078, "website": "https://www.legitfit.com/p/timetable/saunoslimited", "hours": "Check website for sessions", "price": "££"},
+            {"name": "Skuna Sauna, London", "address": "West India Quay, Hertsmere Road, Canary Wharf, London E14 4AL", "lat": 51.5048954, "lon": -0.0190006, "website": "https://www.skunasauna.com/", "hours": "Mon–Fri 12pm–9pm, Sat–Sun 10am–9pm", "price": "£££"},
+            {"name": "Stoke Newington Sauna", "address": "129 Stoke Newington High St, London N16 0PH", "lat": 51.5578698, "lon": -0.0822482, "website": "https://stokenewingtonsauna.com/", "hours": "Check website", "price": "££"},
+            {"name": "SweHeat Sauna", "address": "1 Dock Rd, Royal Victoria Dock, London E16 1AH", "lat": 51.5078, "lon": 0.0178, "website": "https://www.sweheatsauna.co.uk/", "hours": "Check website", "price": "££"},
+            {"name": "Temz Floating Saunas", "address": "The Lensbury, Broom Road, Teddington, London TW11 9NU", "lat": 51.4277844, "lon": -0.333653, "website": "https://www.temzfloatingsaunas.com/", "hours": "By appointment, 50-min sessions", "price": "£££"},
+            {"name": "The Bath House", "address": "1 Grosvenor Gardens, Belgravia, London SW1W 0BD", "lat": 51.4982128, "lon": -0.1534998, "website": "https://banyalondon.co.uk/", "hours": "Mon–Sat 10am–11pm, Sun 10am–10pm", "price": "£££"},
+            {"name": "The Cabin Sauna", "address": "Clapham Common, London SW4", "lat": 51.4614469, "lon": -0.138627, "website": "https://thecabinsauna.co.uk/", "hours": "Seasonal (Oct–May), check website", "price": "££"},
+            {"name": "The Sanctuary at &Soul", "address": "114 Cheshire Street, London E2 6EJ", "lat": 51.5225, "lon": -0.0665, "website": "https://andsoul.com/locations/shoreditch/the-sanctuary", "hours": "Check website", "price": "£££"},
+            {"name": "Urban Heat Sauna", "address": "347 Camberwell Station Road, London SE5 9JN", "lat": 51.4683, "lon": -0.0912, "website": "https://www.urbanheatwellness.com/", "hours": "Check website", "price": "££"},
+            {"name": "WellNest", "address": "7 Crucifix Lane, London Bridge, London SE1 3JW", "lat": 51.5061349, "lon": -0.1011379, "website": "https://www.wellnest.london/", "hours": "Mon–Fri 7am–10pm, Sat 9am–6pm, Sun 10am–5pm", "price": "££"}
         ];
 
         // Supabase client (loaded lazily)
@@ -971,6 +1024,27 @@
 
         function getNote(saunaName) {
             return getNotes()[saunaName] || '';
+        }
+
+        // Favorites management
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem('shvitzFavorites') || '[]');
+        }
+
+        function isFavorite(saunaName) {
+            return getFavorites().includes(saunaName);
+        }
+
+        function toggleFavorite(saunaName) {
+            const favorites = getFavorites();
+            const index = favorites.indexOf(saunaName);
+            if (index === -1) {
+                favorites.push(saunaName);
+            } else {
+                favorites.splice(index, 1);
+            }
+            localStorage.setItem('shvitzFavorites', JSON.stringify(favorites));
+            return index === -1; // returns true if now favorited
         }
 
         // Hash password using SHA-256
@@ -1132,10 +1206,16 @@
                                   openStatus === false ? '<span class="closed-badge">Closed</span>' : '';
                 const directionsUrl = getDirectionsUrl(sauna.lat, sauna.lon, sauna.name);
 
+                const favClass = isFavorite(sauna.name) ? 'favorited' : '';
+                const favHeart = isFavorite(sauna.name) ? '♥' : '♡';
+
                 const popupContent = `
                     <div class="popup-inner">
-                        <h3>${sauna.name}</h3>
-                        ${openBadge}
+                        <div class="popup-header">
+                            <h3>${sauna.name}</h3>
+                            <button class="favorite-btn ${favClass}" onclick="handleToggleFavorite('${sauna.name.replace(/'/g, "\\'")}', this)" title="Add to favorites">${favHeart}</button>
+                        </div>
+                        ${openBadge}<span class="price-tag">${sauna.price}</span>
                         <p class="address">${sauna.address}</p>
                         <p class="hours">${sauna.hours}</p>
                         <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="website-link">Website</a>
@@ -1210,6 +1290,10 @@
                     if (b._isOpen === true && a._isOpen !== true) return 1;
                     return a.name.localeCompare(b.name);
                 });
+            } else if (sortBy === 'favorites') {
+                const favorites = getFavorites();
+                sortedData = sortedData.filter(s => favorites.includes(s.name));
+                sortedData.sort((a, b) => a.name.localeCompare(b.name));
             }
 
             listView.innerHTML = sortedData.map(sauna => {
@@ -1219,10 +1303,13 @@
                 const distanceText = sauna._distance !== undefined ?
                     `<span class="list-distance">${sauna._distance.toFixed(1)} km</span>` : '';
                 const directionsUrl = getDirectionsUrl(sauna.lat, sauna.lon, sauna.name);
+                const favClass = isFavorite(sauna.name) ? 'favorited' : '';
+                const favHeart = isFavorite(sauna.name) ? '♥' : '♡';
 
                 return `
                     <div class="list-item" onclick="focusSauna(${sauna.lat}, ${sauna.lon})">
-                        <h3>${sauna.name}</h3>
+                        <span class="list-favorite ${favClass}" onclick="event.stopPropagation(); handleToggleFavoriteList('${sauna.name.replace(/'/g, "\\'")}', this)">${favHeart}</span>
+                        <h3>${sauna.name} <span class="price-tag">${sauna.price}</span></h3>
                         <p class="list-address">${sauna.address}</p>
                         <span class="list-hours">${sauna.hours}</span>
                         ${openBadge}
@@ -1233,6 +1320,10 @@
                     </div>
                 `;
             }).join('');
+
+            if (sortBy === 'favorites' && sortedData.length === 0) {
+                listView.innerHTML = '<div class="list-item"><p style="color: #6b6156; font-style: italic;">No favorites yet. Click the heart icon to add some!</p></div>';
+            }
         }
 
         // Setup sort buttons
@@ -1240,6 +1331,7 @@
             const alphaBtn = document.getElementById('sort-alpha');
             const distBtn = document.getElementById('sort-distance');
             const openBtn = document.getElementById('sort-open');
+            const favBtn = document.getElementById('sort-favorites');
 
             alphaBtn.onclick = () => {
                 currentSort = 'alpha';
@@ -1272,12 +1364,37 @@
                 updateSortButtons();
                 buildListView('open');
             };
+
+            favBtn.onclick = () => {
+                currentSort = 'favorites';
+                updateSortButtons();
+                buildListView('favorites');
+            };
         }
 
         function updateSortButtons() {
             document.getElementById('sort-alpha').classList.toggle('active', currentSort === 'alpha');
             document.getElementById('sort-distance').classList.toggle('active', currentSort === 'distance');
             document.getElementById('sort-open').classList.toggle('active', currentSort === 'open');
+            document.getElementById('sort-favorites').classList.toggle('active', currentSort === 'favorites');
+        }
+
+        // Toggle favorite from popup
+        function handleToggleFavorite(saunaName, btn) {
+            const isFav = toggleFavorite(saunaName);
+            btn.textContent = isFav ? '♥' : '♡';
+            btn.classList.toggle('favorited', isFav);
+        }
+
+        // Toggle favorite from list
+        function handleToggleFavoriteList(saunaName, el) {
+            const isFav = toggleFavorite(saunaName);
+            el.textContent = isFav ? '♥' : '♡';
+            el.classList.toggle('favorited', isFav);
+            // Rebuild list if viewing favorites
+            if (currentSort === 'favorites') {
+                buildListView('favorites');
+            }
         }
 
         // Focus on sauna from list
