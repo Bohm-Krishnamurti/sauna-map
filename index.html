@@ -887,38 +887,57 @@
         // Supabase client
         const SUPABASE_URL = 'https://bamntpbsixmshkhqpaov.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_xLWh7KbcJNabKSK2Tj7RdA_PA_XxWJ7';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let supabase = null;
+        try {
+            if (window.supabase) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            }
+        } catch (e) {
+            console.error('Failed to initialize Supabase:', e);
+        }
 
         // Fetch notes from Supabase
         async function fetchNotes(bathhouseName) {
-            const { data, error } = await supabase
-                .from('notes')
-                .select('*')
-                .eq('bathhouse_name', bathhouseName)
-                .order('created_at', { ascending: false });
+            if (!supabase) return [];
+            try {
+                const { data, error } = await supabase
+                    .from('notes')
+                    .select('*')
+                    .eq('bathhouse_name', bathhouseName)
+                    .order('created_at', { ascending: false });
 
-            if (error) {
-                console.error('Error fetching notes:', error);
+                if (error) {
+                    console.error('Error fetching notes:', error);
+                    return [];
+                }
+                return data || [];
+            } catch (e) {
+                console.error('Error fetching notes:', e);
                 return [];
             }
-            return data || [];
         }
 
         // Save note to Supabase
         async function saveNoteToSupabase(bathhouseName, noteText, authorName = 'Anonymous') {
-            const { data, error } = await supabase
-                .from('notes')
-                .insert([{
-                    bathhouse_name: bathhouseName,
-                    note_text: noteText,
-                    author_name: authorName || 'Anonymous'
-                }]);
+            if (!supabase) return false;
+            try {
+                const { data, error } = await supabase
+                    .from('notes')
+                    .insert([{
+                        bathhouse_name: bathhouseName,
+                        note_text: noteText,
+                        author_name: authorName || 'Anonymous'
+                    }]);
 
-            if (error) {
-                console.error('Error saving note:', error);
+                if (error) {
+                    console.error('Error saving note:', error);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                console.error('Error saving note:', e);
                 return false;
             }
-            return true;
         }
 
         // Format date for display
