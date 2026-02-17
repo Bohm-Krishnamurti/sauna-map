@@ -1166,49 +1166,26 @@
         // Current city mode: 'london', 'ny', 'sf', 'world'
         let currentCity = 'london';
 
-        // Supabase client (loaded lazily)
+        // Supabase REST API
         const SUPABASE_URL = 'https://bamntpbsixmshkhqpaov.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhbW50cGJzaXhtc2hraHFwYW92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjYyMTgsImV4cCI6MjA4NjkwMjIxOH0.dx02LhgYgOXwrSD7_IKtqXXYwL6DEUHa38ezX1uqRSs';
-        let supabase = null;
-        let supabaseLoaded = false;
-
-        async function loadSupabase() {
-            if (supabaseLoaded) return;
-            supabaseLoaded = true;
-            try {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-                document.head.appendChild(script);
-                await new Promise((resolve, reject) => {
-                    script.onload = resolve;
-                    script.onerror = reject;
-                });
-                if (window.supabase && window.supabase.createClient) {
-                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-                } else {
-                    console.error('Supabase library not found on window');
-                }
-            } catch (e) {
-                console.error('Failed to load Supabase:', e);
-            }
-        }
 
         // Fetch notes from Supabase
         async function fetchNotes(bathhouseName) {
-            await loadSupabase();
-            if (!supabase) return [];
             try {
-                const { data, error } = await supabase
-                    .from('notes')
-                    .select('*')
-                    .eq('bathhouse_name', bathhouseName)
-                    .order('created_at', { ascending: false });
+                const url = SUPABASE_URL + '/rest/v1/notes?bathhouse_name=eq.' + encodeURIComponent(bathhouseName) + '&order=created_at.desc';
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY
+                    }
+                });
 
-                if (error) {
-                    console.error('Error fetching notes:', error);
+                if (!response.ok) {
+                    console.error('Error fetching notes:', response.status);
                     return [];
                 }
-                return data || [];
+                return await response.json();
             } catch (e) {
                 console.error('Error fetching notes:', e);
                 return [];
@@ -1217,26 +1194,25 @@
 
         // Save note to Supabase
         async function saveNoteToSupabase(bathhouseName, noteText, authorName = 'Anonymous') {
-            await loadSupabase();
-            if (!supabase) {
-                console.error('Supabase not loaded');
-                return false;
-            }
             try {
-                const { data, error } = await supabase
-                    .from('notes')
-                    .insert([{
+                const response = await fetch(SUPABASE_URL + '/rest/v1/notes', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
                         bathhouse_name: bathhouseName,
                         note_text: noteText,
                         author_name: authorName || 'Anonymous'
-                    }]);
+                    })
+                });
 
-                if (error) {
-                    console.error('Supabase error:', error.message, error.code, error.details);
-                    // If RLS error, try to give helpful message
-                    if (error.code === '42501' || error.message.includes('policy')) {
-                        console.error('RLS policy issue - need to enable public inserts');
-                    }
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    console.error('Failed to save note:', response.status, errorData);
                     return false;
                 }
                 return true;
