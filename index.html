@@ -1177,14 +1177,16 @@
             supabaseLoaded = true;
             try {
                 const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
                 document.head.appendChild(script);
                 await new Promise((resolve, reject) => {
                     script.onload = resolve;
                     script.onerror = reject;
                 });
-                if (window.supabase) {
+                if (window.supabase && window.supabase.createClient) {
                     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                } else {
+                    console.error('Supabase library not found on window');
                 }
             } catch (e) {
                 console.error('Failed to load Supabase:', e);
