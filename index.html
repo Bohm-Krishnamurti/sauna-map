@@ -12,11 +12,14 @@
       gtag('js', new Date());
       gtag('config', 'G-FSJ6T2MZ63');
     </script>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://i.pinimg.com">
+    <link rel="dns-prefetch" href="https://cartodb-basemaps-a.global.ssl.fastly.net">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         * {
@@ -800,13 +803,154 @@
                 padding: 24px;
             }
         }
+
+        /* Dark mode */
+        .dark-mode-toggle {
+            background: transparent;
+            border: 1px solid #d9d0c3;
+            padding: 6px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .dark-mode-toggle:hover {
+            border-color: #2a2520;
+        }
+
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e8e4de;
+        }
+
+        body.dark-mode #password-screen {
+            background: #1a1a1a;
+        }
+
+        body.dark-mode #password-input {
+            background: #1a1a1a;
+            color: #e8e4de;
+            border-bottom-color: #e8e4de;
+        }
+
+        body.dark-mode button {
+            background: #e8e4de;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode button:hover {
+            background: #ccc8c2;
+        }
+
+        body.dark-mode #map-header {
+            background: #1a1a1a;
+            border-bottom-color: #333;
+        }
+
+        body.dark-mode .city-btn {
+            color: #999;
+            border-color: #444;
+        }
+
+        body.dark-mode .city-btn:not(:last-child) {
+            border-right-color: #444;
+        }
+
+        body.dark-mode .city-btn.active {
+            background: #e8e4de;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .city-selector {
+            border-color: #444;
+        }
+
+        body.dark-mode .header-btn {
+            border-color: #444;
+            color: #999;
+        }
+
+        body.dark-mode .header-btn.active {
+            background: #e8e4de;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode #list-view {
+            background: #1a1a1a;
+        }
+
+        body.dark-mode .list-item {
+            border-bottom-color: #333;
+        }
+
+        body.dark-mode .list-item:hover {
+            background: #252525;
+        }
+
+        body.dark-mode .sort-controls {
+            background: #222;
+            border-bottom-color: #333;
+        }
+
+        body.dark-mode .sort-btn {
+            color: #999;
+        }
+
+        body.dark-mode .sort-btn.active {
+            color: #e8e4de;
+            border-bottom-color: #e8e4de;
+        }
+
+        body.dark-mode .modal-content {
+            background: #1a1a1a;
+            border-color: #333;
+        }
+
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background: #252525;
+            color: #e8e4de;
+            border-color: #444;
+        }
+
+        body.dark-mode .maintained-by,
+        body.dark-mode .maintained-by a {
+            color: #666;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            border-color: #444;
+        }
+
+        body.dark-mode #add-sauna-btn {
+            background: #e8e4de;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .leaflet-popup-content-wrapper {
+            background: #1a1a1a;
+            color: #e8e4de;
+        }
+
+        body.dark-mode .leaflet-popup-tip {
+            background: #1a1a1a;
+        }
+
+        /* Respect system preference */
+        @media (prefers-color-scheme: dark) {
+            body:not(.light-mode) {
+                background: #1a1a1a;
+                color: #e8e4de;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Password Screen -->
     <div id="password-screen">
         <div id="password-form">
-            <img src="https://i.pinimg.com/originals/8d/54/d2/8d54d2e33b1a851745c6db25d360a05e.jpg" alt="Shvitz" class="landing-image" />
+            <img src="https://i.pinimg.com/originals/8d/54/d2/8d54d2e33b1a851745c6db25d360a05e.jpg" alt="Shvitz" class="landing-image" loading="eager" fetchpriority="high" />
             <h2>Codex Shvitzorum</h2>
             <input type="password" id="password-input" placeholder="Enter password" autocomplete="off" />
             <button onclick="checkPassword()">Enter</button>
@@ -832,6 +976,7 @@
                 <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
                 <button id="map-view-btn" class="header-btn active">Map</button>
                 <button id="list-view-btn" class="header-btn">List</button>
+                <button id="dark-mode-toggle" class="dark-mode-toggle" title="Toggle dark mode">&#9790;</button>
             </div>
         </div>
         <div id="map"></div>
@@ -1456,6 +1601,9 @@
 
             // Setup city selector
             setupCitySelector();
+
+            // Setup dark mode
+            setupDarkMode();
         }
 
         // Add markers to map
@@ -1587,6 +1735,22 @@
                     currentCity = city;
                     refreshMap();
                 });
+            });
+        }
+
+        // Setup dark mode
+        function setupDarkMode() {
+            const toggle = document.getElementById('dark-mode-toggle');
+            // Check saved preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                toggle.textContent = '☀';
+            }
+            toggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDark);
+                toggle.textContent = isDark ? '☀' : '☾';
             });
         }
 
