@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codex Shvitzorum</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FSJ6T2MZ63"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FSJ6T2MZ63');
+    </script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
@@ -134,6 +142,21 @@
             color: #666;
             letter-spacing: 0.1em;
             margin: 4px 0 0 0;
+        }
+
+        .maintained-by {
+            font-size: 9px;
+            color: #999;
+            margin-left: 12px;
+        }
+
+        .maintained-by a {
+            color: #999;
+            text-decoration: none;
+        }
+
+        .maintained-by a:hover {
+            color: #2a2520;
         }
 
         .header-controls {
@@ -830,7 +853,7 @@
         <div id="map-header">
             <div class="header-left">
                 <h1>Codex Shvitzorum</h1>
-                <p id="bathhouse-count">40 bathhouses</p>
+                <p id="bathhouse-count">40 bathhouses<span class="maintained-by">maintained by <a href="https://x.com/synchroaphasia" target="_blank">(PT)</a></span></p>
             </div>
             <div class="header-controls">
                 <div class="city-selector">
