@@ -826,6 +826,7 @@
                     <button class="city-btn active" data-city="london">London</button>
                     <button class="city-btn" data-city="ny">NY</button>
                     <button class="city-btn" data-city="sf">SF</button>
+                    <button class="city-btn" data-city="japan">Japan</button>
                     <button class="city-btn" data-city="world">World</button>
                 </div>
                 <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
@@ -1415,6 +1416,8 @@
                     s.address.includes('San Francisco') ||
                     s.address.includes('SF')
                 );
+            } else if (currentCity === 'japan') {
+                return worldData.filter(s => s.country === 'Japan');
             } else {
                 return worldData;
             }
@@ -1549,6 +1552,7 @@
                 london: { center: [51.5074, -0.1278], zoom: 11 },
                 ny: { center: [40.7128, -74.0060], zoom: 11 },
                 sf: { center: [37.7749, -122.4194], zoom: 12 },
+                japan: { center: [36.5, 138.0], zoom: 5 },
                 world: { center: [30, 0], zoom: 2 }
             };
             const view = cityViews[currentCity] || cityViews.london;
