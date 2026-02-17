@@ -1572,7 +1572,7 @@
 
                     // Check password for world tab
                     if (city === 'world' && !worldUnlocked) {
-                        const password = prompt('Enter password for World access:');
+                        const password = prompt('World access is currently restricted, please ask your loyal banchik for access:');
                         if (password !== WORLD_PASSWORD) {
                             return; // Don't switch if wrong password
                         }
