@@ -886,6 +886,7 @@
             <span class="close">&times;</span>
             <h2>Add or Review a Bathhouse</h2>
             <p>Know a great bathhouse we're missing? Share it with the community.</p>
+            <p style="font-size: 12px; color: #6b6156; font-style: italic; margin-top: 8px;">Only add bathhouses worth adding.</p>
 
             <div id="success-msg" class="success-message">
                 Thank you. Your submission has been received.
@@ -898,6 +899,7 @@
                         <option value="">Select an option</option>
                         <option value="new">Add a new bathhouse</option>
                         <option value="review">Review an existing bathhouse</option>
+                        <option value="delist">Suggest a bathhouse for de-listing</option>
                     </select>
                 </div>
 
@@ -921,6 +923,22 @@
                 <div class="form-group" id="sauna-website-group">
                     <label for="sauna-website">Website</label>
                     <input type="url" id="sauna-website" placeholder="https://">
+                </div>
+
+                <div class="form-group" id="why-add-group" style="display: none;">
+                    <label for="why-add">Why should this bathhouse be added?</label>
+                    <textarea id="why-add" placeholder="What makes this place special? Why is it worth visiting?"></textarea>
+                </div>
+
+                <div class="form-group" id="why-delist-group" style="display: none;">
+                    <label for="why-delist">Why should this bathhouse be de-listed?</label>
+                    <textarea id="why-delist" placeholder="Has it closed? Quality issues? Please explain..."></textarea>
+                </div>
+
+                <div class="form-group" id="google-maps-group" style="display: none;">
+                    <label for="google-maps-link">Google Maps Link (optional)</label>
+                    <input type="url" id="google-maps-link" placeholder="Paste Google Maps link to auto-fill details">
+                    <small>Paste a Google Maps link and we'll try to extract the details</small>
                 </div>
 
                 <div class="form-group">
@@ -1919,28 +1937,60 @@
             const saunaNameGroup = document.getElementById('sauna-name-group');
             const saunaAddressGroup = document.getElementById('sauna-address-group');
             const saunaWebsiteGroup = document.getElementById('sauna-website-group');
+            const whyAddGroup = document.getElementById('why-add-group');
+            const whyDelistGroup = document.getElementById('why-delist-group');
+            const googleMapsGroup = document.getElementById('google-maps-group');
+
+            // Hide all optional groups first
+            saunaSelectGroup.style.display = 'none';
+            saunaNameGroup.style.display = 'none';
+            saunaAddressGroup.style.display = 'none';
+            saunaWebsiteGroup.style.display = 'none';
+            whyAddGroup.style.display = 'none';
+            whyDelistGroup.style.display = 'none';
+            googleMapsGroup.style.display = 'none';
+            document.getElementById('sauna-name').required = false;
+            document.getElementById('sauna-address').required = false;
 
             if (type === 'review') {
                 saunaSelectGroup.style.display = 'block';
-                saunaNameGroup.style.display = 'none';
-                saunaAddressGroup.style.display = 'none';
-                saunaWebsiteGroup.style.display = 'none';
-                document.getElementById('sauna-name').required = false;
-                document.getElementById('sauna-address').required = false;
             } else if (type === 'new') {
-                saunaSelectGroup.style.display = 'none';
                 saunaNameGroup.style.display = 'block';
                 saunaAddressGroup.style.display = 'block';
                 saunaWebsiteGroup.style.display = 'block';
+                whyAddGroup.style.display = 'block';
+                googleMapsGroup.style.display = 'block';
                 document.getElementById('sauna-name').required = true;
                 document.getElementById('sauna-address').required = true;
-            } else {
-                saunaSelectGroup.style.display = 'none';
-                saunaNameGroup.style.display = 'none';
-                saunaAddressGroup.style.display = 'none';
-                saunaWebsiteGroup.style.display = 'none';
+            } else if (type === 'delist') {
+                saunaSelectGroup.style.display = 'block';
+                whyDelistGroup.style.display = 'block';
             }
         };
+
+        // Google Maps link parser
+        document.getElementById('google-maps-link').addEventListener('paste', (e) => {
+            setTimeout(() => {
+                const url = e.target.value;
+                try {
+                    // Try to extract place name from Google Maps URL
+                    // Format: https://www.google.com/maps/place/Place+Name/...
+                    const placeMatch = url.match(/\/place\/([^\/]+)/);
+                    if (placeMatch) {
+                        const placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
+                        document.getElementById('sauna-name').value = placeName;
+                    }
+                    // Try to extract coordinates
+                    const coordMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+                    if (coordMatch) {
+                        // Could store coords for later use
+                        console.log('Coordinates:', coordMatch[1], coordMatch[2]);
+                    }
+                } catch (err) {
+                    console.log('Could not parse Google Maps URL');
+                }
+            }, 100);
+        });
 
         saunaForm.onsubmit = (e) => {
             e.preventDefault();
@@ -1951,6 +2001,9 @@
                 name: document.getElementById('sauna-name').value,
                 address: document.getElementById('sauna-address').value,
                 website: document.getElementById('sauna-website').value,
+                whyAdd: document.getElementById('why-add').value,
+                whyDelist: document.getElementById('why-delist').value,
+                googleMapsLink: document.getElementById('google-maps-link').value,
                 rating: document.querySelector('input[name="rating"]:checked')?.value,
                 review: document.getElementById('review-text').value,
                 reviewerName: document.getElementById('reviewer-name').value || 'Anonymous',
