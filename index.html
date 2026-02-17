@@ -132,6 +132,18 @@
             align-items: center;
         }
 
+        .header-top-row {
+            display: contents;
+        }
+
+        #mobile-menu-toggle {
+            display: none;
+        }
+
+        .mobile-controls-row {
+            display: contents;
+        }
+
         .header-left h1 {
             font-size: 13px;
             font-weight: 400;
@@ -778,14 +790,63 @@
 
         @media (max-width: 600px) {
             #map-header {
-                padding: 16px 20px;
+                padding: 12px 16px;
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
+                align-items: stretch;
+                gap: 0;
+            }
+
+            .header-top-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #mobile-menu-toggle {
+                display: block;
+                padding: 6px 12px;
+                font-size: 10px;
             }
 
             #map-header h1 {
                 font-size: 12px;
+            }
+
+            .maintained-by {
+                display: none;
+            }
+
+            .header-controls {
+                display: none;
+                flex-direction: column;
+                gap: 8px;
+                padding-top: 12px;
+                border-top: 1px solid #d9d0c3;
+                margin-top: 12px;
+            }
+
+            #map-header.menu-open .header-controls {
+                display: flex;
+            }
+
+            .city-selector {
+                margin-right: 0;
+                flex-wrap: wrap;
+            }
+
+            .city-btn {
+                flex: 1;
+                text-align: center;
+                padding: 8px 8px;
+            }
+
+            .header-controls .mobile-controls-row {
+                display: flex;
+                gap: 8px;
+            }
+
+            .header-controls .mobile-controls-row .header-btn {
+                flex: 1;
             }
 
             #add-sauna-btn {
@@ -820,9 +881,12 @@
     <!-- Map Screen -->
     <div id="map-screen">
         <div id="map-header">
-            <div class="header-left">
-                <h1>Codex Shvitzorum</h1>
-                <p><span id="bathhouse-count">40 bathhouses</span><span class="maintained-by"> · maintained by <a href="https://x.com/synchroaphasia" target="_blank">(PT)</a> · <a href="#about" id="about-link">About</a></span></p>
+            <div class="header-top-row">
+                <div class="header-left">
+                    <h1>Codex Shvitzorum</h1>
+                    <p><span id="bathhouse-count">40 bathhouses</span><span class="maintained-by"> · maintained by <a href="https://x.com/synchroaphasia" target="_blank">(PT)</a> · <a href="#about" id="about-link">About</a></span></p>
+                </div>
+                <button id="mobile-menu-toggle" class="header-btn" aria-label="Toggle menu" aria-expanded="false">Menu</button>
             </div>
             <div class="header-controls">
                 <div class="city-selector">
@@ -832,9 +896,11 @@
                     <button class="city-btn" data-city="japan">Japan</button>
                     <button class="city-btn" data-city="world">World</button>
                 </div>
-                <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
-                <button id="map-view-btn" class="header-btn active">Map</button>
-                <button id="list-view-btn" class="header-btn">List</button>
+                <div class="mobile-controls-row">
+                    <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
+                    <button id="map-view-btn" class="header-btn active">Map</button>
+                    <button id="list-view-btn" class="header-btn">List</button>
+                </div>
             </div>
         </div>
         <div id="map"></div>
@@ -1453,6 +1519,9 @@
 
             // Setup city selector
             setupCitySelector();
+
+            // Setup mobile menu toggle
+            setupMobileMenuToggle();
         }
 
         // Add markers to map
@@ -1584,6 +1653,17 @@
                     currentCity = city;
                     refreshMap();
                 });
+            });
+        }
+
+        // Setup mobile menu toggle
+        function setupMobileMenuToggle() {
+            const toggle = document.getElementById('mobile-menu-toggle');
+            const header = document.getElementById('map-header');
+            toggle.addEventListener('click', () => {
+                const isOpen = header.classList.toggle('menu-open');
+                toggle.setAttribute('aria-expanded', isOpen);
+                toggle.textContent = isOpen ? 'Close' : 'Menu';
             });
         }
 
