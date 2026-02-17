@@ -164,61 +164,37 @@
             border-color: #2a2520;
         }
 
-        .world-toggle {
+        .city-selector {
             display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            padding: 6px 12px;
             border: 1px solid #d9d0c3;
-            font-size: 11px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
             margin-right: 8px;
         }
 
-        .world-toggle:hover {
-            border-color: #2a2520;
-        }
-
-        .world-toggle input {
-            appearance: none;
-            width: 32px;
-            height: 18px;
-            background: #d9d0c3;
-            border-radius: 9px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .world-toggle input::before {
-            content: '';
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            background: #f7f3ed;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.2s;
-        }
-
-        .world-toggle input:checked {
-            background: #2a2520;
-        }
-
-        .world-toggle input:checked::before {
-            transform: translateX(14px);
-        }
-
-        .toggle-label {
+        .city-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: none;
+            font-size: 11px;
             font-family: 'EB Garamond', Georgia, serif;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
             color: #6b6156;
+            margin: 0;
+            transition: all 0.2s;
         }
 
-        .world-toggle input:checked + .toggle-label {
+        .city-btn:not(:last-child) {
+            border-right: 1px solid #d9d0c3;
+        }
+
+        .city-btn:hover {
             color: #2a2520;
+        }
+
+        .city-btn.active {
+            background: #2a2520;
+            color: #f7f3ed;
         }
 
         .country-tag {
@@ -857,10 +833,12 @@
                 <p id="bathhouse-count">40 bathhouses</p>
             </div>
             <div class="header-controls">
-                <label class="world-toggle" title="Experimental: Show global bathhouses">
-                    <input type="checkbox" id="world-toggle">
-                    <span class="toggle-label">World</span>
-                </label>
+                <div class="city-selector">
+                    <button class="city-btn active" data-city="london">London</button>
+                    <button class="city-btn" data-city="ny">NY</button>
+                    <button class="city-btn" data-city="sf">SF</button>
+                    <button class="city-btn" data-city="world">World</button>
+                </div>
                 <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
                 <button id="map-view-btn" class="header-btn active">Map</button>
                 <button id="list-view-btn" class="header-btn">List</button>
@@ -1154,8 +1132,8 @@
             {"name": "Saunos", "address": "Eagle Wharf Road, London", "lat": 51.5324, "lon": -0.0861, "website": "", "country": "UK", "type": "Sauna", "price": "££"}
         ];
 
-        // Current view mode
-        let worldMode = false;
+        // Current city mode: 'london', 'ny', 'sf', 'world'
+        let currentCity = 'london';
 
         // Supabase client (loaded lazily)
         const SUPABASE_URL = 'https://bamntpbsixmshkhqpaov.supabase.co';
@@ -1405,7 +1383,23 @@
 
         // Get current data based on mode
         function getCurrentData() {
-            return worldMode ? worldData : saunaData;
+            if (currentCity === 'london') {
+                return saunaData;
+            } else if (currentCity === 'ny') {
+                return worldData.filter(s =>
+                    s.address.includes('New York') ||
+                    s.address.includes('Brooklyn') ||
+                    s.address.includes('Manhattan') ||
+                    s.address.includes('NYC')
+                );
+            } else if (currentCity === 'sf') {
+                return worldData.filter(s =>
+                    s.address.includes('San Francisco') ||
+                    s.address.includes('SF')
+                );
+            } else {
+                return worldData;
+            }
         }
 
         // Markers layer group
@@ -1439,8 +1433,8 @@
             // Setup sort buttons
             setupSortButtons();
 
-            // Setup world toggle
-            setupWorldToggle();
+            // Setup city selector
+            setupCitySelector();
         }
 
         // Add markers to map
@@ -1455,9 +1449,9 @@
                 const favClass = isFavorite(sauna.name) ? 'favorited' : '';
                 const favHeart = isFavorite(sauna.name) ? '♥' : '♡';
 
-                // Different popup content for London vs World
+                // Different popup content for London vs other cities
                 let infoSection = '';
-                if (worldMode) {
+                if (currentCity !== 'london') {
                     const typeTag = sauna.type ? `<span class="country-tag">${sauna.type}</span>` : '';
                     const countryTag = sauna.country ? `<span class="country-tag">${sauna.country}</span>` : '';
                     infoSection = `
@@ -1532,23 +1526,30 @@
             const data = getCurrentData();
             document.getElementById('bathhouse-count').textContent = data.length + ' bathhouses';
 
-            // Adjust view
-            if (worldMode) {
-                map.setView([30, 0], 2); // World view
-            } else {
-                map.setView([51.5074, -0.1278], 11); // London view
-            }
+            // Adjust view based on city
+            const cityViews = {
+                london: { center: [51.5074, -0.1278], zoom: 11 },
+                ny: { center: [40.7128, -74.0060], zoom: 11 },
+                sf: { center: [37.7749, -122.4194], zoom: 12 },
+                world: { center: [30, 0], zoom: 2 }
+            };
+            const view = cityViews[currentCity] || cityViews.london;
+            map.setView(view.center, view.zoom);
 
             // Rebuild list
             buildListView(currentSort);
         }
 
-        // Setup world toggle
-        function setupWorldToggle() {
-            const toggle = document.getElementById('world-toggle');
-            toggle.addEventListener('change', (e) => {
-                worldMode = e.target.checked;
-                refreshMap();
+        // Setup city selector
+        function setupCitySelector() {
+            const buttons = document.querySelectorAll('.city-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCity = btn.dataset.city;
+                    refreshMap();
+                });
             });
         }
 
@@ -1564,7 +1565,7 @@
                     s._distance = getDistance(userLat, userLon, s.lat, s.lon);
                 });
                 sortedData.sort((a, b) => a._distance - b._distance);
-            } else if (sortBy === 'open' && !worldMode) {
+            } else if (sortBy === 'open' && currentCity === 'london') {
                 sortedData.forEach(s => {
                     s._isOpen = isOpenNow(s.hours);
                 });
@@ -1586,9 +1587,9 @@
                 const distanceText = sauna._distance !== undefined ?
                     `<span class="list-distance">${sauna._distance.toFixed(1)} km</span>` : '';
 
-                // Different display for world vs London
+                // Different display for London vs other cities
                 let infoLine = '';
-                if (worldMode) {
+                if (currentCity !== 'london') {
                     const typeTag = sauna.type ? `<span class="country-tag">${sauna.type}</span>` : '';
                     const countryTag = sauna.country ? `<span class="country-tag">${sauna.country}</span>` : '';
                     infoLine = `${typeTag}${countryTag}${distanceText}`;
