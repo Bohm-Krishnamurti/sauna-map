@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -884,20 +883,34 @@
             {"name": "WellNest", "address": "7 Crucifix Lane, London Bridge, London SE1 3JW", "lat": 51.5061349, "lon": -0.1011379, "website": "https://www.wellnest.london/", "hours": "Mon–Fri 7am–10pm, Sat 9am–6pm, Sun 10am–5pm"}
         ];
 
-        // Supabase client
+        // Supabase client (loaded lazily)
         const SUPABASE_URL = 'https://bamntpbsixmshkhqpaov.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_xLWh7KbcJNabKSK2Tj7RdA_PA_XxWJ7';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhbW50cGJzaXhtc2hraHFwYW92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjYyMTgsImV4cCI6MjA4NjkwMjIxOH0.dx02LhgYgOXwrSD7_IKtqXXYwL6DEUHa38ezX1uqRSs';
         let supabase = null;
-        try {
-            if (window.supabase) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let supabaseLoaded = false;
+
+        async function loadSupabase() {
+            if (supabaseLoaded) return;
+            supabaseLoaded = true;
+            try {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                document.head.appendChild(script);
+                await new Promise((resolve, reject) => {
+                    script.onload = resolve;
+                    script.onerror = reject;
+                });
+                if (window.supabase) {
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                }
+            } catch (e) {
+                console.error('Failed to load Supabase:', e);
             }
-        } catch (e) {
-            console.error('Failed to initialize Supabase:', e);
         }
 
         // Fetch notes from Supabase
         async function fetchNotes(bathhouseName) {
+            await loadSupabase();
             if (!supabase) return [];
             try {
                 const { data, error } = await supabase
@@ -919,6 +932,7 @@
 
         // Save note to Supabase
         async function saveNoteToSupabase(bathhouseName, noteText, authorName = 'Anonymous') {
+            await loadSupabase();
             if (!supabase) return false;
             try {
                 const { data, error } = await supabase
