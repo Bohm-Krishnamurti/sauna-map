@@ -758,36 +758,6 @@
             font-style: italic;
         }
 
-        .rating-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .rating-group input[type="radio"] {
-            display: none;
-        }
-
-        .rating-group label {
-            padding: 8px 16px;
-            border: 1px solid #d9d0c3;
-            cursor: pointer;
-            font-size: 14px;
-            text-transform: none;
-            letter-spacing: 0;
-            transition: all 0.2s;
-        }
-
-        .rating-group input[type="radio"]:checked + label {
-            background: #2a2520;
-            color: #f7f3ed;
-            border-color: #2a2520;
-        }
-
-        .rating-group label:hover {
-            border-color: #2a2520;
-        }
-
         .submit-btn {
             width: 100%;
             padding: 14px;
@@ -828,10 +798,6 @@
 
             #password-form {
                 padding: 24px;
-            }
-
-            .rating-group {
-                flex-wrap: wrap;
             }
         }
     </style>
@@ -939,22 +905,6 @@
                     <label for="google-maps-link">Google Maps Link (optional)</label>
                     <input type="url" id="google-maps-link" placeholder="Paste Google Maps link to auto-fill details">
                     <small>Paste a Google Maps link and we'll try to extract the details</small>
-                </div>
-
-                <div class="form-group">
-                    <label>Rating</label>
-                    <div class="rating-group">
-                        <input type="radio" name="rating" id="rating-1" value="1">
-                        <label for="rating-1">1</label>
-                        <input type="radio" name="rating" id="rating-2" value="2">
-                        <label for="rating-2">2</label>
-                        <input type="radio" name="rating" id="rating-3" value="3">
-                        <label for="rating-3">3</label>
-                        <input type="radio" name="rating" id="rating-4" value="4">
-                        <label for="rating-4">4</label>
-                        <input type="radio" name="rating" id="rating-5" value="5">
-                        <label for="rating-5">5</label>
-                    </div>
                 </div>
 
                 <div class="form-group">
@@ -2004,7 +1954,6 @@
                 whyAdd: document.getElementById('why-add').value,
                 whyDelist: document.getElementById('why-delist').value,
                 googleMapsLink: document.getElementById('google-maps-link').value,
-                rating: document.querySelector('input[name="rating"]:checked')?.value,
                 review: document.getElementById('review-text').value,
                 reviewerName: document.getElementById('reviewer-name').value || 'Anonymous',
                 reviewerEmail: document.getElementById('reviewer-email').value,
