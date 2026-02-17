@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -160,6 +161,13 @@
             border-color: #2a2520;
         }
 
+        #list-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
         #list-view {
             flex: 1;
             overflow-y: auto;
@@ -197,6 +205,85 @@
             padding: 4px 8px;
             background: #ebe5db;
             margin-top: 8px;
+        }
+
+        .list-item .list-distance {
+            font-size: 12px;
+            color: #6b6156;
+            margin-left: 8px;
+        }
+
+        .list-item .open-now {
+            font-size: 11px;
+            color: #2d6a4f;
+            background: #d8f3dc;
+            padding: 3px 8px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .list-item .closed-now {
+            font-size: 11px;
+            color: #9d4040;
+            background: #f8d7da;
+            padding: 3px 8px;
+            margin-left: 8px;
+        }
+
+        .popup-inner .directions-link {
+            display: inline-block;
+            font-size: 12px;
+            color: #2a2520;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #2a2520;
+            padding-bottom: 2px;
+            margin-left: 16px;
+        }
+
+        .popup-inner .open-badge {
+            display: inline-block;
+            font-size: 11px;
+            color: #2d6a4f;
+            background: #d8f3dc;
+            padding: 4px 10px;
+            margin-bottom: 12px;
+        }
+
+        .popup-inner .closed-badge {
+            display: inline-block;
+            font-size: 11px;
+            color: #9d4040;
+            background: #f8d7da;
+            padding: 4px 10px;
+            margin-bottom: 12px;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 8px;
+            padding: 12px 32px;
+            background: #efe9e0;
+            border-bottom: 1px solid #d9d0c3;
+        }
+
+        .sort-btn {
+            padding: 6px 12px;
+            background: transparent;
+            color: #6b6156;
+            border: 1px solid #d9d0c3;
+            font-size: 11px;
+            font-family: 'EB Garamond', Georgia, serif;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .sort-btn.active {
+            background: #2a2520;
+            color: #f7f3ed;
+            border-color: #2a2520;
         }
 
         .list-item .list-link {
@@ -309,13 +396,62 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: #6b6156;
+            margin-bottom: 12px;
+        }
+
+        .notes-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        .shared-note {
+            padding: 10px 12px;
+            background: #f7f3ed;
+            margin-bottom: 8px;
+            border-left: 3px solid #d9d0c3;
+        }
+
+        .shared-note .note-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0 0 6px 0;
+            color: #2a2520;
+        }
+
+        .shared-note .note-meta {
+            font-size: 11px;
+            color: #8b8278;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .no-notes {
+            font-size: 13px;
+            color: #8b8278;
+            font-style: italic;
+            margin: 0;
+        }
+
+        .add-note-form {
+            border-top: 1px solid #d9d0c3;
+            padding-top: 12px;
+        }
+
+        .author-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d9d0c3;
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 13px;
+            background: #f7f3ed;
             margin-bottom: 8px;
         }
 
-        .notes-section textarea {
+        .note-input {
             width: 100%;
-            min-height: 80px;
-            padding: 12px;
+            min-height: 60px;
+            padding: 10px 12px;
             border: 1px solid #d9d0c3;
             font-family: 'EB Garamond', Georgia, serif;
             font-size: 14px;
@@ -324,7 +460,8 @@
             background: #f7f3ed;
         }
 
-        .notes-section textarea:focus {
+        .author-input:focus,
+        .note-input:focus {
             outline: none;
             border-color: #2a2520;
         }
@@ -342,7 +479,7 @@
             margin-top: 10px;
             font-size: 12px;
             font-style: italic;
-            color: #6b6156;
+            color: #2d6a4f;
         }
 
         /* Leaflet controls */
@@ -606,7 +743,14 @@
             </div>
         </div>
         <div id="map"></div>
-        <div id="list-view" style="display: none;"></div>
+        <div id="list-container" style="display: none;">
+            <div class="sort-controls">
+                <button class="sort-btn active" id="sort-alpha">A–Z</button>
+                <button class="sort-btn" id="sort-distance">Nearest</button>
+                <button class="sort-btn" id="sort-open">Open Now</button>
+            </div>
+            <div id="list-view"></div>
+        </div>
         <button id="add-sauna-btn">+ Add Bathhouse</button>
     </div>
 
@@ -740,15 +884,52 @@
             {"name": "WellNest", "address": "7 Crucifix Lane, London Bridge, London SE1 3JW", "lat": 51.5061349, "lon": -0.1011379, "website": "https://www.wellnest.london/", "hours": "Mon–Fri 7am–10pm, Sat 9am–6pm, Sun 10am–5pm"}
         ];
 
-        // Notes storage
-        function getNotes() {
-            return JSON.parse(localStorage.getItem('saunaNotes') || '{}');
+        // Supabase client
+        const SUPABASE_URL = 'https://bamntpbsixmshkhqpaov.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_xLWh7KbcJNabKSK2Tj7RdA_PA_XxWJ7';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Fetch notes from Supabase
+        async function fetchNotes(bathhouseName) {
+            const { data, error } = await supabase
+                .from('notes')
+                .select('*')
+                .eq('bathhouse_name', bathhouseName)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error fetching notes:', error);
+                return [];
+            }
+            return data || [];
         }
 
-        function saveNote(saunaName, note) {
-            const notes = getNotes();
-            notes[saunaName] = note;
-            localStorage.setItem('saunaNotes', JSON.stringify(notes));
+        // Save note to Supabase
+        async function saveNoteToSupabase(bathhouseName, noteText, authorName = 'Anonymous') {
+            const { data, error } = await supabase
+                .from('notes')
+                .insert([{
+                    bathhouse_name: bathhouseName,
+                    note_text: noteText,
+                    author_name: authorName || 'Anonymous'
+                }]);
+
+            if (error) {
+                console.error('Error saving note:', error);
+                return false;
+            }
+            return true;
+        }
+
+        // Format date for display
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        // Legacy local storage (for backwards compatibility)
+        function getNotes() {
+            return JSON.parse(localStorage.getItem('saunaNotes') || '{}');
         }
 
         function getNote(saunaName) {
@@ -807,6 +988,92 @@
 
         let map = null;
         let userMarker = null;
+        let userLat = null;
+        let userLon = null;
+        let currentSort = 'alpha';
+
+        // Calculate distance between two points (Haversine)
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        // Check if bathhouse is open now
+        function isOpenNow(hours) {
+            if (!hours || hours.includes('Check') || hours.includes('appointment') || hours.includes('session')) {
+                return null; // Unknown
+            }
+
+            const now = new Date();
+            const day = now.getDay(); // 0=Sun, 1=Mon, etc.
+            const currentHour = now.getHours();
+            const currentMin = now.getMinutes();
+            const currentTime = currentHour * 60 + currentMin;
+
+            // Parse common patterns
+            if (hours.includes('Daily')) {
+                const match = hours.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[–-]\s*(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
+                if (match) {
+                    let openHour = parseInt(match[1]);
+                    let openMin = parseInt(match[2]) || 0;
+                    let closeHour = parseInt(match[4]);
+                    let closeMin = parseInt(match[5]) || 0;
+
+                    if (match[3]?.toLowerCase() === 'pm' && openHour < 12) openHour += 12;
+                    if (match[6]?.toLowerCase() === 'pm' && closeHour < 12) closeHour += 12;
+                    if (match[3]?.toLowerCase() === 'am' && openHour === 12) openHour = 0;
+                    if (match[6]?.toLowerCase() === 'am' && closeHour === 12) closeHour = 0;
+
+                    const openTime = openHour * 60 + openMin;
+                    const closeTime = closeHour * 60 + closeMin;
+
+                    return currentTime >= openTime && currentTime < closeTime;
+                }
+            }
+
+            // Mon-Fri / Sat-Sun patterns
+            const isWeekday = day >= 1 && day <= 5;
+            const isWeekend = day === 0 || day === 6;
+
+            if (hours.includes('Mon') && hours.includes('Sat')) {
+                const parts = hours.split(',');
+                for (const part of parts) {
+                    const weekdayMatch = part.match(/Mon[–-]Fri\s+(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[–-]\s*(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
+                    const weekendMatch = part.match(/Sat[–-]Sun\s+(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[–-]\s*(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
+
+                    if (isWeekday && weekdayMatch) {
+                        let openHour = parseInt(weekdayMatch[1]);
+                        let closeHour = parseInt(weekdayMatch[4]);
+                        if (weekdayMatch[3]?.toLowerCase() === 'pm' && openHour < 12) openHour += 12;
+                        if (weekdayMatch[6]?.toLowerCase() === 'pm' && closeHour < 12) closeHour += 12;
+                        const openTime = openHour * 60 + (parseInt(weekdayMatch[2]) || 0);
+                        const closeTime = closeHour * 60 + (parseInt(weekdayMatch[5]) || 0);
+                        return currentTime >= openTime && currentTime < closeTime;
+                    }
+                    if (isWeekend && weekendMatch) {
+                        let openHour = parseInt(weekendMatch[1]);
+                        let closeHour = parseInt(weekendMatch[4]);
+                        if (weekendMatch[3]?.toLowerCase() === 'pm' && openHour < 12) openHour += 12;
+                        if (weekendMatch[6]?.toLowerCase() === 'pm' && closeHour < 12) closeHour += 12;
+                        const openTime = openHour * 60 + (parseInt(weekendMatch[2]) || 0);
+                        const closeTime = closeHour * 60 + (parseInt(weekendMatch[5]) || 0);
+                        return currentTime >= openTime && currentTime < closeTime;
+                    }
+                }
+            }
+
+            return null; // Unable to parse
+        }
+
+        // Get directions URL
+        function getDirectionsUrl(lat, lon, name) {
+            return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&destination_place_id=${encodeURIComponent(name)}`;
+        }
 
         // Initialize map
         function initializeMap() {
@@ -821,24 +1088,54 @@
             // Add markers
             saunaData.forEach(sauna => {
                 const marker = L.marker([sauna.lat, sauna.lon], { icon: customIcon });
+                const saunaId = sauna.name.replace(/[^a-zA-Z0-9]/g, '_');
 
-                const existingNote = getNote(sauna.name);
+                const openStatus = isOpenNow(sauna.hours);
+                const openBadge = openStatus === true ? '<span class="open-badge">Open Now</span>' :
+                                  openStatus === false ? '<span class="closed-badge">Closed</span>' : '';
+                const directionsUrl = getDirectionsUrl(sauna.lat, sauna.lon, sauna.name);
+
                 const popupContent = `
                     <div class="popup-inner">
                         <h3>${sauna.name}</h3>
+                        ${openBadge}
                         <p class="address">${sauna.address}</p>
                         <p class="hours">${sauna.hours}</p>
-                        <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="website-link">Visit Website</a>
+                        <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="website-link">Website</a>
+                        <a href="${directionsUrl}" target="_blank" rel="noopener noreferrer" class="directions-link">Directions</a>
                     </div>
                     <div class="notes-section">
-                        <label>Your Notes</label>
-                        <textarea id="note-${sauna.name.replace(/[^a-zA-Z0-9]/g, '_')}" placeholder="Add your notes about this bathhouse...">${existingNote}</textarea>
-                        <button type="button" class="save-note" onclick="handleSaveNote('${sauna.name.replace(/'/g, "\\'")}')">Save Note</button>
-                        <div class="note-saved" id="saved-${sauna.name.replace(/[^a-zA-Z0-9]/g, '_')}">Note saved</div>
+                        <label>Community Notes</label>
+                        <div id="notes-list-${saunaId}" class="notes-list">Loading notes...</div>
+                        <div class="add-note-form">
+                            <input type="text" id="author-${saunaId}" placeholder="Your name (optional)" class="author-input" />
+                            <textarea id="note-${saunaId}" placeholder="Share your experience..." class="note-input"></textarea>
+                            <button type="button" class="save-note" onclick="handleSaveNote('${sauna.name.replace(/'/g, "\\'")}')">Add Note</button>
+                            <div class="note-saved" id="saved-${saunaId}">Note added!</div>
+                        </div>
                     </div>
                 `;
 
-                marker.bindPopup(popupContent, { maxWidth: 320 });
+                marker.bindPopup(popupContent, { maxWidth: 340 });
+
+                // Load notes when popup opens
+                marker.on('popupopen', async () => {
+                    const notesContainer = document.getElementById('notes-list-' + saunaId);
+                    if (notesContainer) {
+                        const notes = await fetchNotes(sauna.name);
+                        if (notes.length === 0) {
+                            notesContainer.innerHTML = '<p class="no-notes">No notes yet. Be the first!</p>';
+                        } else {
+                            notesContainer.innerHTML = notes.map(n => `
+                                <div class="shared-note">
+                                    <p class="note-text">${n.note_text}</p>
+                                    <p class="note-meta">— ${n.author_name}, ${formatDate(n.created_at)}</p>
+                                </div>
+                            `).join('');
+                        }
+                    }
+                });
+
                 marker.addTo(map);
             });
 
@@ -850,27 +1147,106 @@
 
             // Setup locate button
             setupLocateButton();
+
+            // Setup sort buttons
+            setupSortButtons();
         }
 
         // Build list view
-        function buildListView() {
+        function buildListView(sortBy = 'alpha') {
             const listView = document.getElementById('list-view');
-            const sortedSaunas = [...saunaData].sort((a, b) => a.name.localeCompare(b.name));
+            let sortedData = [...saunaData];
 
-            listView.innerHTML = sortedSaunas.map(sauna => `
-                <div class="list-item" onclick="focusSauna(${sauna.lat}, ${sauna.lon})">
-                    <h3>${sauna.name}</h3>
-                    <p class="list-address">${sauna.address}</p>
-                    <span class="list-hours">${sauna.hours}</span>
-                    <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="list-link" onclick="event.stopPropagation()">Website</a>
-                </div>
-            `).join('');
+            if (sortBy === 'alpha') {
+                sortedData.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortBy === 'distance' && userLat !== null) {
+                sortedData.forEach(s => {
+                    s._distance = getDistance(userLat, userLon, s.lat, s.lon);
+                });
+                sortedData.sort((a, b) => a._distance - b._distance);
+            } else if (sortBy === 'open') {
+                sortedData.forEach(s => {
+                    s._isOpen = isOpenNow(s.hours);
+                });
+                sortedData.sort((a, b) => {
+                    if (a._isOpen === true && b._isOpen !== true) return -1;
+                    if (b._isOpen === true && a._isOpen !== true) return 1;
+                    return a.name.localeCompare(b.name);
+                });
+            }
+
+            listView.innerHTML = sortedData.map(sauna => {
+                const openStatus = isOpenNow(sauna.hours);
+                const openBadge = openStatus === true ? '<span class="open-now">Open</span>' :
+                                  openStatus === false ? '<span class="closed-now">Closed</span>' : '';
+                const distanceText = sauna._distance !== undefined ?
+                    `<span class="list-distance">${sauna._distance.toFixed(1)} km</span>` : '';
+                const directionsUrl = getDirectionsUrl(sauna.lat, sauna.lon, sauna.name);
+
+                return `
+                    <div class="list-item" onclick="focusSauna(${sauna.lat}, ${sauna.lon})">
+                        <h3>${sauna.name}</h3>
+                        <p class="list-address">${sauna.address}</p>
+                        <span class="list-hours">${sauna.hours}</span>
+                        ${openBadge}
+                        ${distanceText}
+                        <br style="margin-top: 8px;">
+                        <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="list-link" onclick="event.stopPropagation()">Website</a>
+                        <a href="${directionsUrl}" target="_blank" rel="noopener noreferrer" class="list-link" onclick="event.stopPropagation()">Directions</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Setup sort buttons
+        function setupSortButtons() {
+            const alphaBtn = document.getElementById('sort-alpha');
+            const distBtn = document.getElementById('sort-distance');
+            const openBtn = document.getElementById('sort-open');
+
+            alphaBtn.onclick = () => {
+                currentSort = 'alpha';
+                updateSortButtons();
+                buildListView('alpha');
+            };
+
+            distBtn.onclick = () => {
+                if (userLat === null) {
+                    // Get location first
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            userLat = pos.coords.latitude;
+                            userLon = pos.coords.longitude;
+                            currentSort = 'distance';
+                            updateSortButtons();
+                            buildListView('distance');
+                        },
+                        () => alert('Enable location to sort by distance')
+                    );
+                } else {
+                    currentSort = 'distance';
+                    updateSortButtons();
+                    buildListView('distance');
+                }
+            };
+
+            openBtn.onclick = () => {
+                currentSort = 'open';
+                updateSortButtons();
+                buildListView('open');
+            };
+        }
+
+        function updateSortButtons() {
+            document.getElementById('sort-alpha').classList.toggle('active', currentSort === 'alpha');
+            document.getElementById('sort-distance').classList.toggle('active', currentSort === 'distance');
+            document.getElementById('sort-open').classList.toggle('active', currentSort === 'open');
         }
 
         // Focus on sauna from list
         function focusSauna(lat, lon) {
             document.getElementById('map').style.display = 'block';
-            document.getElementById('list-view').style.display = 'none';
+            document.getElementById('list-container').style.display = 'none';
             document.getElementById('map-view-btn').classList.add('active');
             document.getElementById('list-view-btn').classList.remove('active');
             map.setView([lat, lon], 15);
@@ -881,7 +1257,7 @@
             const mapBtn = document.getElementById('map-view-btn');
             const listBtn = document.getElementById('list-view-btn');
             const mapEl = document.getElementById('map');
-            const listEl = document.getElementById('list-view');
+            const listEl = document.getElementById('list-container');
 
             mapBtn.onclick = () => {
                 mapEl.style.display = 'block';
@@ -896,6 +1272,7 @@
                 listEl.style.display = 'block';
                 listBtn.classList.add('active');
                 mapBtn.classList.remove('active');
+                buildListView(currentSort);
             };
         }
 
@@ -916,9 +1293,13 @@
                         const lat = position.coords.latitude;
                         const lon = position.coords.longitude;
 
+                        // Store user location globally
+                        userLat = lat;
+                        userLon = lon;
+
                         // Switch to map view
                         document.getElementById('map').style.display = 'block';
-                        document.getElementById('list-view').style.display = 'none';
+                        document.getElementById('list-container').style.display = 'none';
                         document.getElementById('map-view-btn').classList.add('active');
                         document.getElementById('list-view-btn').classList.remove('active');
 
@@ -945,18 +1326,50 @@
         }
 
         // Handle save note
-        function handleSaveNote(saunaName) {
-            const textareaId = 'note-' + saunaName.replace(/[^a-zA-Z0-9]/g, '_');
-            const savedId = 'saved-' + saunaName.replace(/[^a-zA-Z0-9]/g, '_');
-            const textarea = document.getElementById(textareaId);
-            const savedMsg = document.getElementById(savedId);
+        async function handleSaveNote(saunaName) {
+            const saunaId = saunaName.replace(/[^a-zA-Z0-9]/g, '_');
+            const textarea = document.getElementById('note-' + saunaId);
+            const authorInput = document.getElementById('author-' + saunaId);
+            const savedMsg = document.getElementById('saved-' + saunaId);
+            const notesContainer = document.getElementById('notes-list-' + saunaId);
 
-            if (textarea) {
-                saveNote(saunaName, textarea.value);
+            if (!textarea || !textarea.value.trim()) {
+                return;
+            }
+
+            const noteText = textarea.value.trim();
+            const authorName = authorInput?.value.trim() || 'Anonymous';
+
+            // Save to Supabase
+            const success = await saveNoteToSupabase(saunaName, noteText, authorName);
+
+            if (success) {
+                // Clear inputs
+                textarea.value = '';
+                if (authorInput) authorInput.value = '';
+
+                // Show success message
                 savedMsg.style.display = 'block';
                 setTimeout(() => {
                     savedMsg.style.display = 'none';
                 }, 2000);
+
+                // Refresh notes list
+                const notes = await fetchNotes(saunaName);
+                if (notesContainer) {
+                    if (notes.length === 0) {
+                        notesContainer.innerHTML = '<p class="no-notes">No notes yet. Be the first!</p>';
+                    } else {
+                        notesContainer.innerHTML = notes.map(n => `
+                            <div class="shared-note">
+                                <p class="note-text">${n.note_text}</p>
+                                <p class="note-meta">— ${n.author_name}, ${formatDate(n.created_at)}</p>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } else {
+                alert('Failed to save note. Please try again.');
             }
         }
 
