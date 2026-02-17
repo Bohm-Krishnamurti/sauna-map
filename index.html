@@ -164,6 +164,71 @@
             border-color: #2a2520;
         }
 
+        .world-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border: 1px solid #d9d0c3;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-right: 8px;
+        }
+
+        .world-toggle:hover {
+            border-color: #2a2520;
+        }
+
+        .world-toggle input {
+            appearance: none;
+            width: 32px;
+            height: 18px;
+            background: #d9d0c3;
+            border-radius: 9px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .world-toggle input::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #f7f3ed;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .world-toggle input:checked {
+            background: #2a2520;
+        }
+
+        .world-toggle input:checked::before {
+            transform: translateX(14px);
+        }
+
+        .toggle-label {
+            font-family: 'EB Garamond', Georgia, serif;
+            color: #6b6156;
+        }
+
+        .world-toggle input:checked + .toggle-label {
+            color: #2a2520;
+        }
+
+        .country-tag {
+            font-size: 11px;
+            color: #6b6156;
+            background: #ebe5db;
+            padding: 3px 8px;
+            margin-left: 8px;
+        }
+
         #list-container {
             flex: 1;
             display: flex;
@@ -789,9 +854,13 @@
         <div id="map-header">
             <div class="header-left">
                 <h1>Shvitz Map</h1>
-                <p>40 bathhouses</p>
+                <p id="bathhouse-count">40 bathhouses</p>
             </div>
             <div class="header-controls">
+                <label class="world-toggle" title="Experimental: Show global bathhouses">
+                    <input type="checkbox" id="world-toggle">
+                    <span class="toggle-label">World</span>
+                </label>
                 <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
                 <button id="map-view-btn" class="header-btn active">Map</button>
                 <button id="list-view-btn" class="header-btn">List</button>
@@ -939,6 +1008,61 @@
             {"name": "Urban Heat Sauna", "address": "347 Camberwell Station Road, London SE5 9JN", "lat": 51.4683, "lon": -0.0912, "website": "https://www.urbanheatwellness.com/", "hours": "Check website", "price": "££"},
             {"name": "WellNest", "address": "7 Crucifix Lane, London Bridge, London SE1 3JW", "lat": 51.5061349, "lon": -0.1011379, "website": "https://www.wellnest.london/", "hours": "Mon–Fri 7am–10pm, Sat 9am–6pm, Sun 10am–5pm", "price": "££"}
         ];
+
+        // World bathhouse data (experimental)
+        const worldData = [
+            // Finland
+            {"name": "Rajaportin Sauna", "address": "Pispalan valtatie 9, Tampere", "lat": 61.4978, "lon": 23.7419, "website": "https://rajaportinsauna.fi/", "country": "Finland", "type": "Sauna", "price": "£"},
+            {"name": "Kotiharju Sauna", "address": "Harjutorinkatu 1, Helsinki", "lat": 60.1867, "lon": 24.9526, "website": "https://www.kotiharjunsauna.fi/", "country": "Finland", "type": "Sauna", "price": "£"},
+            {"name": "Löyly Helsinki", "address": "Hernesaarenranta 4, Helsinki", "lat": 60.1534, "lon": 24.9213, "website": "https://www.loylyhelsinki.fi/", "country": "Finland", "type": "Sauna", "price": "££"},
+            {"name": "SompaSauna", "address": "Sompasaari, Helsinki", "lat": 60.1889, "lon": 24.9786, "website": "", "country": "Finland", "type": "Sauna", "price": "£"},
+            {"name": "Finnish Sauna Society", "address": "Vaskiniementie 10, Helsinki", "lat": 60.1548, "lon": 24.8697, "website": "https://sauna.fi/en/", "country": "Finland", "type": "Sauna", "price": "££"},
+            {"name": "Rauhaniemi Public Sauna", "address": "Rauhaniemi, Tampere", "lat": 61.5088, "lon": 23.7506, "website": "", "country": "Finland", "type": "Sauna", "price": "£"},
+            {"name": "Sauna Hermanni", "address": "Hämeentie 63, Helsinki", "lat": 60.1934, "lon": 24.9678, "website": "https://saunahermanni.fi/", "country": "Finland", "type": "Sauna", "price": "£"},
+            {"name": "Kuusijärvi Sauna", "address": "Kuusijärventie, Vantaa", "lat": 60.3172, "lon": 25.1117, "website": "", "country": "Finland", "type": "Sauna", "price": "£"},
+            {"name": "Sauna Village (Saunaküla)", "address": "Mooste, Põlvamaa", "lat": 58.1167, "lon": 27.1667, "website": "", "country": "Finland", "type": "SmokeSauna", "price": "££"},
+            {"name": "Jätkänkämppä Smoke Sauna", "address": "Kuopio", "lat": 62.8924, "lon": 27.6882, "website": "", "country": "Finland", "type": "SmokeSauna", "price": "££"},
+            // Estonia
+            {"name": "Mooska Smoke Sauna", "address": "Mooska küla, Võrumaa", "lat": 57.8431, "lon": 26.9686, "website": "http://mooska.eu/", "country": "Estonia", "type": "SmokeSauna", "price": "££"},
+            {"name": "Iglupark", "address": "Pirita tee, Tallinn", "lat": 59.4370, "lon": 24.7536, "website": "https://iglupark.ee/", "country": "Estonia", "type": "Sauna", "price": "££"},
+            {"name": "MustJoe Kortisalu", "address": "Võrumaa", "lat": 57.8500, "lon": 27.0000, "website": "", "country": "Estonia", "type": "SmokeSauna", "price": "££"},
+            // Sweden
+            {"name": "Sauna Vinterviken", "address": "Vinterviken, Stockholm", "lat": 59.3193, "lon": 18.0686, "website": "", "country": "Sweden", "type": "Sauna", "price": "£"},
+            {"name": "Hellasgården", "address": "Nacka", "lat": 59.2984, "lon": 18.1667, "website": "https://hellasgarden.se/", "country": "Sweden", "type": "Sauna", "price": "£"},
+            // Norway
+            {"name": "Oslo Badstuforening", "address": "Langkaia, Oslo", "lat": 59.9070, "lon": 10.7489, "website": "https://www.facebook.com/oslobadstuforening/", "country": "Norway", "type": "Sauna", "price": "£"},
+            {"name": "SALT", "address": "Langkaia 1, Oslo", "lat": 59.9067, "lon": 10.7478, "website": "https://salted.no/", "country": "Norway", "type": "Sauna", "price": "££"},
+            // Turkey (Hammams)
+            {"name": "Çağaloğlu Hamamı", "address": "Alemdar, Istanbul", "lat": 41.0082, "lon": 28.9784, "website": "https://cagalogluhamami.com.tr/", "country": "Turkey", "type": "Hammam", "price": "£££"},
+            {"name": "Kılıç Ali Paşa Hamamı", "address": "Kemankeş, Istanbul", "lat": 41.0256, "lon": 28.9813, "website": "https://kilicalipasahamami.com/", "country": "Turkey", "type": "Hammam", "price": "£££"},
+            {"name": "Çemberlitaş Hamamı", "address": "Çemberlitaş, Istanbul", "lat": 41.0082, "lon": 28.9713, "website": "https://www.cemberlitashamami.com/", "country": "Turkey", "type": "Hammam", "price": "££"},
+            {"name": "Ayasofya Hürrem Sultan Hamamı", "address": "Sultanahmet, Istanbul", "lat": 41.0054, "lon": 28.9768, "website": "https://www.ayasofyahamami.com/", "country": "Turkey", "type": "Hammam", "price": "£££"},
+            {"name": "Süleymaniye Hamamı", "address": "Süleymaniye, Istanbul", "lat": 41.0164, "lon": 28.9639, "website": "", "country": "Turkey", "type": "Hammam", "price": "££"},
+            // Japan (Onsens)
+            {"name": "Takaragawa Onsen", "address": "Minakami, Gunma", "lat": 36.7833, "lon": 139.0167, "website": "https://www.takaragawa.com/", "country": "Japan", "type": "Onsen", "price": "£££"},
+            {"name": "Nyuto Onsen", "address": "Semboku, Akita", "lat": 39.7833, "lon": 140.7833, "website": "", "country": "Japan", "type": "Onsen", "price": "££"},
+            {"name": "Hoshi Onsen Chojukan", "address": "Minakami, Gunma", "lat": 36.7500, "lon": 138.7833, "website": "https://www.hoshi-onsen.com/", "country": "Japan", "type": "Onsen", "price": "£££"},
+            {"name": "Sekizenkan", "address": "Shima Onsen, Gunma", "lat": 36.6500, "lon": 138.7833, "website": "https://www.sekizenkan.co.jp/", "country": "Japan", "type": "Onsen", "price": "£££"},
+            {"name": "Dogo Onsen", "address": "Matsuyama, Ehime", "lat": 33.8522, "lon": 132.7856, "website": "https://dogo.jp/", "country": "Japan", "type": "Onsen", "price": "£"},
+            {"name": "Kurokawa Onsen", "address": "Minamioguni, Kumamoto", "lat": 33.1000, "lon": 131.2167, "website": "", "country": "Japan", "type": "Onsen", "price": "££"},
+            // Russia
+            {"name": "Sanduny Banya", "address": "Neglinnaya 14, Moscow", "lat": 55.7633, "lon": 37.6219, "website": "https://sanduny.ru/", "country": "Russia", "type": "Banya", "price": "££"},
+            // Germany
+            {"name": "Vabali Spa Berlin", "address": "Seydlitzstraße 6, Berlin", "lat": 52.5256, "lon": 13.3667, "website": "https://www.vabali.de/", "country": "Germany", "type": "Sauna", "price": "££"},
+            {"name": "Liquidrom", "address": "Möckernstraße 10, Berlin", "lat": 52.4981, "lon": 13.3811, "website": "https://liquidrom-berlin.de/", "country": "Germany", "type": "Sauna", "price": "££"},
+            // USA
+            {"name": "Russian & Turkish Baths", "address": "268 E 10th St, New York", "lat": 40.7271, "lon": -73.9833, "website": "https://www.russianturkishbaths.com/", "country": "USA", "type": "Banya", "price": "££"},
+            {"name": "Archimedes Banya", "address": "748 Innes Ave, San Francisco", "lat": 37.7325, "lon": -122.3731, "website": "https://bfrfc.com/", "country": "USA", "type": "Banya", "price": "££"},
+            {"name": "Bathhouse Chicago", "address": "1369 W Erie St, Chicago", "lat": 41.8940, "lon": -87.6633, "website": "https://www.bathhousechicago.com/", "country": "USA", "type": "Sauna", "price": "££"},
+            // Morocco
+            {"name": "Hammam de la Rose", "address": "130 Dar el Bacha, Marrakech", "lat": 31.6350, "lon": -7.9900, "website": "https://hammamdelarose.com/", "country": "Morocco", "type": "Hammam", "price": "££"},
+            // Korea
+            {"name": "Dragon Hill Spa", "address": "Yongsan-gu, Seoul", "lat": 37.5289, "lon": 126.9653, "website": "", "country": "Korea", "type": "Jjimjilbang", "price": "£"},
+            {"name": "Siloam Sauna", "address": "Jungnim-ro, Seoul", "lat": 37.5531, "lon": 126.9683, "website": "", "country": "Korea", "type": "Jjimjilbang", "price": "£"}
+        ];
+
+        // Current view mode
+        let worldMode = false;
 
         // Supabase client (loaded lazily)
         const SUPABASE_URL = 'https://bamntpbsixmshkhqpaov.supabase.co';
@@ -1186,6 +1310,14 @@
             return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&destination_place_id=${encodeURIComponent(name)}`;
         }
 
+        // Get current data based on mode
+        function getCurrentData() {
+            return worldMode ? worldData : saunaData;
+        }
+
+        // Markers layer group
+        let markersLayer = null;
+
         // Initialize map
         function initializeMap() {
             map = L.map('map').setView([51.5074, -0.1278], 11);
@@ -1196,18 +1328,61 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
             }).addTo(map);
 
-            // Add markers
-            saunaData.forEach(sauna => {
+            // Create markers layer
+            markersLayer = L.layerGroup().addTo(map);
+
+            // Add markers for current mode
+            addMarkers();
+
+            // Build list view
+            buildListView();
+
+            // Setup view toggle
+            setupViewToggle();
+
+            // Setup locate button
+            setupLocateButton();
+
+            // Setup sort buttons
+            setupSortButtons();
+
+            // Setup world toggle
+            setupWorldToggle();
+        }
+
+        // Add markers to map
+        function addMarkers() {
+            const data = getCurrentData();
+
+            data.forEach(sauna => {
                 const marker = L.marker([sauna.lat, sauna.lon], { icon: customIcon });
                 const saunaId = sauna.name.replace(/[^a-zA-Z0-9]/g, '_');
 
-                const openStatus = isOpenNow(sauna.hours);
-                const openBadge = openStatus === true ? '<span class="open-badge">Open Now</span>' :
-                                  openStatus === false ? '<span class="closed-badge">Closed</span>' : '';
                 const directionsUrl = getDirectionsUrl(sauna.lat, sauna.lon, sauna.name);
-
                 const favClass = isFavorite(sauna.name) ? 'favorited' : '';
                 const favHeart = isFavorite(sauna.name) ? '♥' : '♡';
+
+                // Different popup content for London vs World
+                let infoSection = '';
+                if (worldMode) {
+                    const typeTag = sauna.type ? `<span class="country-tag">${sauna.type}</span>` : '';
+                    const countryTag = sauna.country ? `<span class="country-tag">${sauna.country}</span>` : '';
+                    infoSection = `
+                        ${typeTag}${countryTag}<span class="price-tag">${sauna.price}</span>
+                        <p class="address">${sauna.address}</p>
+                    `;
+                } else {
+                    const openStatus = isOpenNow(sauna.hours);
+                    const openBadge = openStatus === true ? '<span class="open-badge">Open Now</span>' :
+                                      openStatus === false ? '<span class="closed-badge">Closed</span>' : '';
+                    infoSection = `
+                        ${openBadge}<span class="price-tag">${sauna.price}</span>
+                        <p class="address">${sauna.address}</p>
+                        <p class="hours">${sauna.hours}</p>
+                    `;
+                }
+
+                const websiteLink = sauna.website ? `<a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="website-link">Website</a>` : '';
 
                 const popupContent = `
                     <div class="popup-inner">
@@ -1215,10 +1390,8 @@
                             <h3>${sauna.name}</h3>
                             <button class="favorite-btn ${favClass}" onclick="handleToggleFavorite('${sauna.name.replace(/'/g, "\\'")}', this)" title="Add to favorites">${favHeart}</button>
                         </div>
-                        ${openBadge}<span class="price-tag">${sauna.price}</span>
-                        <p class="address">${sauna.address}</p>
-                        <p class="hours">${sauna.hours}</p>
-                        <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="website-link">Website</a>
+                        ${infoSection}
+                        ${websiteLink}
                         <a href="${directionsUrl}" target="_blank" rel="noopener noreferrer" class="directions-link">Directions</a>
                     </div>
                     <div class="notes-section">
@@ -1253,26 +1426,43 @@
                     }
                 });
 
-                marker.addTo(map);
+                markersLayer.addLayer(marker);
             });
+        }
 
-            // Build list view
-            buildListView();
+        // Refresh map for mode change
+        function refreshMap() {
+            markersLayer.clearLayers();
+            addMarkers();
 
-            // Setup view toggle
-            setupViewToggle();
+            // Update count
+            const data = getCurrentData();
+            document.getElementById('bathhouse-count').textContent = data.length + ' bathhouses';
 
-            // Setup locate button
-            setupLocateButton();
+            // Adjust view
+            if (worldMode) {
+                map.setView([30, 0], 2); // World view
+            } else {
+                map.setView([51.5074, -0.1278], 11); // London view
+            }
 
-            // Setup sort buttons
-            setupSortButtons();
+            // Rebuild list
+            buildListView(currentSort);
+        }
+
+        // Setup world toggle
+        function setupWorldToggle() {
+            const toggle = document.getElementById('world-toggle');
+            toggle.addEventListener('change', (e) => {
+                worldMode = e.target.checked;
+                refreshMap();
+            });
         }
 
         // Build list view
         function buildListView(sortBy = 'alpha') {
             const listView = document.getElementById('list-view');
-            let sortedData = [...saunaData];
+            let sortedData = [...getCurrentData()];
 
             if (sortBy === 'alpha') {
                 sortedData.sort((a, b) => a.name.localeCompare(b.name));
@@ -1281,7 +1471,7 @@
                     s._distance = getDistance(userLat, userLon, s.lat, s.lon);
                 });
                 sortedData.sort((a, b) => a._distance - b._distance);
-            } else if (sortBy === 'open') {
+            } else if (sortBy === 'open' && !worldMode) {
                 sortedData.forEach(s => {
                     s._isOpen = isOpenNow(s.hours);
                 });
@@ -1297,25 +1487,35 @@
             }
 
             listView.innerHTML = sortedData.map(sauna => {
-                const openStatus = isOpenNow(sauna.hours);
-                const openBadge = openStatus === true ? '<span class="open-now">Open</span>' :
-                                  openStatus === false ? '<span class="closed-now">Closed</span>' : '';
-                const distanceText = sauna._distance !== undefined ?
-                    `<span class="list-distance">${sauna._distance.toFixed(1)} km</span>` : '';
                 const directionsUrl = getDirectionsUrl(sauna.lat, sauna.lon, sauna.name);
                 const favClass = isFavorite(sauna.name) ? 'favorited' : '';
                 const favHeart = isFavorite(sauna.name) ? '♥' : '♡';
+                const distanceText = sauna._distance !== undefined ?
+                    `<span class="list-distance">${sauna._distance.toFixed(1)} km</span>` : '';
+
+                // Different display for world vs London
+                let infoLine = '';
+                if (worldMode) {
+                    const typeTag = sauna.type ? `<span class="country-tag">${sauna.type}</span>` : '';
+                    const countryTag = sauna.country ? `<span class="country-tag">${sauna.country}</span>` : '';
+                    infoLine = `${typeTag}${countryTag}${distanceText}`;
+                } else {
+                    const openStatus = isOpenNow(sauna.hours);
+                    const openBadge = openStatus === true ? '<span class="open-now">Open</span>' :
+                                      openStatus === false ? '<span class="closed-now">Closed</span>' : '';
+                    infoLine = `<span class="list-hours">${sauna.hours}</span>${openBadge}${distanceText}`;
+                }
+
+                const websiteLink = sauna.website ? `<a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="list-link" onclick="event.stopPropagation()">Website</a>` : '';
 
                 return `
                     <div class="list-item" onclick="focusSauna(${sauna.lat}, ${sauna.lon})">
                         <span class="list-favorite ${favClass}" onclick="event.stopPropagation(); handleToggleFavoriteList('${sauna.name.replace(/'/g, "\\'")}', this)">${favHeart}</span>
                         <h3>${sauna.name} <span class="price-tag">${sauna.price}</span></h3>
                         <p class="list-address">${sauna.address}</p>
-                        <span class="list-hours">${sauna.hours}</span>
-                        ${openBadge}
-                        ${distanceText}
+                        ${infoLine}
                         <br style="margin-top: 8px;">
-                        <a href="${sauna.website}" target="_blank" rel="noopener noreferrer" class="list-link" onclick="event.stopPropagation()">Website</a>
+                        ${websiteLink}
                         <a href="${directionsUrl}" target="_blank" rel="noopener noreferrer" class="list-link" onclick="event.stopPropagation()">Directions</a>
                     </div>
                 `;
