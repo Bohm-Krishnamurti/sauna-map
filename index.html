@@ -1196,7 +1196,10 @@
         // Save note to Supabase
         async function saveNoteToSupabase(bathhouseName, noteText, authorName = 'Anonymous') {
             await loadSupabase();
-            if (!supabase) return false;
+            if (!supabase) {
+                console.error('Supabase not loaded');
+                return false;
+            }
             try {
                 const { data, error } = await supabase
                     .from('notes')
@@ -1207,7 +1210,11 @@
                     }]);
 
                 if (error) {
-                    console.error('Error saving note:', error);
+                    console.error('Supabase error:', error.message, error.code, error.details);
+                    // If RLS error, try to give helpful message
+                    if (error.code === '42501' || error.message.includes('policy')) {
+                        console.error('RLS policy issue - need to enable public inserts');
+                    }
                     return false;
                 }
                 return true;
