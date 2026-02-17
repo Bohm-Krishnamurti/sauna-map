@@ -898,7 +898,7 @@
 
                 <div class="form-group" id="why-delist-group" style="display: none;">
                     <label for="why-delist">Why should this bathhouse be de-listed?</label>
-                    <textarea id="why-delist" placeholder="Has it closed? Quality issues? Please explain..."></textarea>
+                    <textarea id="why-delist" placeholder="Why is this bath house bad?"></textarea>
                 </div>
 
                 <div class="form-group" id="google-maps-group" style="display: none;">
@@ -907,17 +907,17 @@
                     <small>Paste a Google Maps link and we'll try to extract the details</small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="review-group">
                     <label for="review-text">Your Review</label>
                     <textarea id="review-text" placeholder="Tell us about your experience..." required></textarea>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="reviewer-name-group">
                     <label for="reviewer-name">Your Name</label>
                     <input type="text" id="reviewer-name" placeholder="Anonymous">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="reviewer-email-group">
                     <label for="reviewer-email">Your Email</label>
                     <input type="email" id="reviewer-email" placeholder="For follow-up only">
                     <small>We'll only use this to contact you about your submission</small>
@@ -1890,6 +1890,9 @@
             const whyAddGroup = document.getElementById('why-add-group');
             const whyDelistGroup = document.getElementById('why-delist-group');
             const googleMapsGroup = document.getElementById('google-maps-group');
+            const reviewGroup = document.getElementById('review-group');
+            const reviewerNameGroup = document.getElementById('reviewer-name-group');
+            const reviewerEmailGroup = document.getElementById('reviewer-email-group');
 
             // Hide all optional groups first
             saunaSelectGroup.style.display = 'none';
@@ -1901,6 +1904,12 @@
             googleMapsGroup.style.display = 'none';
             document.getElementById('sauna-name').required = false;
             document.getElementById('sauna-address').required = false;
+
+            // Show review fields by default
+            reviewGroup.style.display = 'block';
+            reviewerNameGroup.style.display = 'block';
+            reviewerEmailGroup.style.display = 'block';
+            document.getElementById('review-text').required = true;
 
             if (type === 'review') {
                 saunaSelectGroup.style.display = 'block';
@@ -1915,6 +1924,10 @@
             } else if (type === 'delist') {
                 saunaSelectGroup.style.display = 'block';
                 whyDelistGroup.style.display = 'block';
+                // Hide review and email for delist
+                reviewGroup.style.display = 'none';
+                reviewerEmailGroup.style.display = 'none';
+                document.getElementById('review-text').required = false;
             }
         };
 
