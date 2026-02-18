@@ -776,31 +776,121 @@
             font-size: 14px;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             #map-header {
-                padding: 16px 20px;
+                padding: 12px 16px;
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .header-left {
+                text-align: center;
             }
 
             #map-header h1 {
                 font-size: 12px;
             }
 
+            .header-left p {
+                font-size: 11px;
+            }
+
+            .maintained-by {
+                display: block;
+                margin-left: 0;
+                margin-top: 4px;
+            }
+
+            .header-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 6px;
+            }
+
+            .city-selector {
+                order: 1;
+                width: 100%;
+                justify-content: center;
+                margin-right: 0;
+            }
+
+            .city-btn {
+                padding: 8px 10px;
+                font-size: 10px;
+                flex: 1;
+            }
+
+            .header-btn {
+                padding: 8px 12px;
+                font-size: 10px;
+            }
+
+            #locate-btn {
+                display: none;
+            }
+
             #add-sauna-btn {
                 bottom: 20px;
                 right: 20px;
                 padding: 12px 20px;
+                font-size: 12px;
             }
 
             .modal-content {
-                margin: 20px;
-                padding: 32px 24px;
+                margin: 10px;
+                padding: 24px 20px;
+                max-height: 90vh;
+                overflow-y: auto;
             }
 
             #password-form {
-                padding: 24px;
+                padding: 20px;
+            }
+
+            .landing-image {
+                width: 280px;
+            }
+
+            .list-item {
+                padding: 16px 20px;
+            }
+
+            .sort-controls {
+                padding: 10px 16px;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .sort-btn {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .popup-inner {
+                min-width: 200px;
+            }
+
+            .popup-inner h3 {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .city-btn {
+                padding: 6px 8px;
+                font-size: 9px;
+            }
+
+            .header-btn {
+                padding: 6px 10px;
+                font-size: 9px;
+            }
+
+            #map-header h1 {
+                font-size: 11px;
+                letter-spacing: 0.15em;
             }
         }
     </style>
