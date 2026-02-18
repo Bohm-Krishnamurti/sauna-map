@@ -196,6 +196,31 @@
             margin-right: 8px;
         }
 
+        .city-dropdown {
+            display: none;
+            padding: 8px 12px;
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 12px;
+            border: 1px solid #d9d0c3;
+            background: #f7f3ed;
+            color: #2a2520;
+            cursor: pointer;
+        }
+
+        #mobile-locate-btn {
+            display: none;
+            position: absolute;
+            top: 90px;
+            left: 10px;
+            z-index: 1000;
+            padding: 8px 12px;
+            background: #f7f3ed;
+            border: 1px solid #d9d0c3;
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
         .city-btn {
             padding: 6px 12px;
             background: transparent;
@@ -809,15 +834,11 @@
             }
 
             .city-selector {
-                order: 1;
-                width: 100%;
-                justify-content: center;
-                margin-right: 0;
+                display: none;
             }
 
-            .city-btn {
-                padding: 8px 10px;
-                font-size: 10px;
+            .city-dropdown {
+                display: block;
                 flex: 1;
             }
 
@@ -830,11 +851,15 @@
                 display: none;
             }
 
+            #mobile-locate-btn {
+                display: block;
+            }
+
             #add-sauna-btn {
-                bottom: 20px;
-                right: 20px;
-                padding: 12px 20px;
-                font-size: 12px;
+                bottom: 16px;
+                right: 16px;
+                padding: 10px 14px;
+                font-size: 11px;
             }
 
             .modal-content {
@@ -878,19 +903,24 @@
         }
 
         @media (max-width: 400px) {
-            .city-btn {
-                padding: 6px 8px;
-                font-size: 9px;
-            }
-
             .header-btn {
                 padding: 6px 10px;
                 font-size: 9px;
             }
 
+            .city-dropdown {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
             #map-header h1 {
                 font-size: 11px;
                 letter-spacing: 0.15em;
+            }
+
+            #add-sauna-btn {
+                padding: 8px 12px;
+                font-size: 10px;
             }
         }
     </style>
@@ -922,12 +952,20 @@
                     <button class="city-btn" data-city="japan">Japan</button>
                     <button class="city-btn" data-city="world">World</button>
                 </div>
+                <select id="city-dropdown" class="city-dropdown">
+                    <option value="london" selected>London</option>
+                    <option value="ny">NY</option>
+                    <option value="sf">SF</option>
+                    <option value="japan">Japan</option>
+                    <option value="world">World</option>
+                </select>
                 <button id="locate-btn" class="header-btn" title="Find my location">Locate Me</button>
                 <button id="map-view-btn" class="header-btn active">Map</button>
                 <button id="list-view-btn" class="header-btn">List</button>
             </div>
         </div>
         <div id="map"></div>
+        <button id="mobile-locate-btn">Locate</button>
         <div id="list-container" style="display: none;">
             <div class="sort-controls">
                 <button class="sort-btn active" id="sort-alpha">A–Z</button>
@@ -1656,6 +1694,9 @@
         // Setup city selector
         function setupCitySelector() {
             const buttons = document.querySelectorAll('.city-btn');
+            const dropdown = document.getElementById('city-dropdown');
+
+            // Desktop buttons
             buttons.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const city = btn.dataset.city;
@@ -1664,17 +1705,46 @@
                     if (city === 'world' && !worldUnlocked) {
                         const password = prompt('World access is currently restricted, please ask your loyal banchik for access:');
                         if (password !== WORLD_PASSWORD) {
-                            return; // Don't switch if wrong password
+                            return;
                         }
                         worldUnlocked = true;
                     }
 
                     buttons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
+                    dropdown.value = city;
                     currentCity = city;
                     refreshMap();
                 });
             });
+
+            // Mobile dropdown
+            dropdown.addEventListener('change', (e) => {
+                const city = e.target.value;
+
+                if (city === 'world' && !worldUnlocked) {
+                    const password = prompt('World access is currently restricted, please ask your loyal banchik for access:');
+                    if (password !== WORLD_PASSWORD) {
+                        dropdown.value = currentCity;
+                        return;
+                    }
+                    worldUnlocked = true;
+                }
+
+                buttons.forEach(b => b.classList.remove('active'));
+                const activeBtn = document.querySelector(`.city-btn[data-city="${city}"]`);
+                if (activeBtn) activeBtn.classList.add('active');
+                currentCity = city;
+                refreshMap();
+            });
+
+            // Mobile locate button
+            const mobileLocateBtn = document.getElementById('mobile-locate-btn');
+            if (mobileLocateBtn) {
+                mobileLocateBtn.onclick = () => {
+                    document.getElementById('locate-btn').click();
+                };
+            }
         }
 
         // Build list view
